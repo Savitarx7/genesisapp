@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "GenesisApp",
+    "slug": "GenesisApp",
+    "version": "0.0.1",
+    "platforms": ["ios", "android"],
+    "android": {
+      "package": "com.anonymous.genesisapp",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/splash.png",
+        "backgroundColor": "#000000"
+      },
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-5506676208773786~4816873092"
+      }
+    },
+    "ios": {
+      "supportsTablet": true,
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-5506676208773786~4816873092"
+      }
+    },
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f0fad71c-a7c9-4c22-9356-33a6ca1b0c32"
+      }
+    },
+    "newArchEnabled": true,
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "owner": "savitarx7"
+  }
+}
