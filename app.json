@@ -3,7 +3,10 @@
     "name": "GenesisApp",
     "slug": "GenesisApp",
     "version": "0.0.1",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "android": {
       "package": "com.anonymous.genesisapp",
       "adaptiveIcon": {
@@ -15,9 +18,13 @@
       }
     },
     "ios": {
+      "bundleIdentifier": "com.adrianpavlick8.genesisapp",
       "supportsTablet": true,
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-5506676208773786~4816873092"
+      },
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "splash": {
@@ -30,11 +37,13 @@
         "projectId": "f0fad71c-a7c9-4c22-9356-33a6ca1b0c32"
       }
     },
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "owner": "savitarx7"
   }
 }
