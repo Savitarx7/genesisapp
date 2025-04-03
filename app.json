@@ -18,6 +18,7 @@
     "ios": {
       "bundleIdentifier": "com.adrianpavlick8.genesisapp",
       "supportsTablet": true,
+      "icon": "./assets/icon.png",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-5506676208773786~4816873092"
       },
