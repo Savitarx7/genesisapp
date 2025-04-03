@@ -2,6 +2,7 @@
   "expo": {
     "name": "GenesisApp",
     "slug": "GenesisApp",
+    "icon": "./assets/splash.png",
     "version": "0.0.1",
     "platforms": [
       "ios",
