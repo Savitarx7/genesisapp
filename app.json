@@ -2,16 +2,13 @@
   "expo": {
     "name": "GenesisApp",
     "slug": "GenesisApp",
-    "icon": "./assets/splash.png",
     "version": "0.0.1",
-    "platforms": [
-      "ios",
-      "android"
-    ],
+    "icon": "./assets/icon.png",
+    "platforms": ["ios", "android"],
     "android": {
       "package": "com.anonymous.genesisapp",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/splash.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#000000"
       },
       "config": {
@@ -42,9 +39,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "owner": "savitarx7"
   }
 }
