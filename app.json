@@ -31,6 +31,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
+    "assetBundlePatterns": ["**/*"],
     "extra": {
       "eas": {
         "projectId": "f0fad71c-a7c9-4c22-9356-33a6ca1b0c32"
@@ -40,7 +41,6 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
     "owner": "savitarx7"
   }
 }
