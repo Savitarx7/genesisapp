@@ -44,6 +44,7 @@
         "ITSAppUsesNonExemptEncryption": false,
         "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads."
       }
-    }
+    },
+    "plugins": ["./plugins/with-custom-podfile.js"]
   }
 }
