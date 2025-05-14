@@ -2,9 +2,27 @@
   "expo": {
     "name": "GenesisApp",
     "slug": "GenesisApp",
-    "version": "0.0.1",
+    "version": "0.0.3",
     "icon": "./assets/icon.png",
     "platforms": ["ios", "android"],
+    "jsEngine": "hermes",
+    "newArchEnabled": false,
+    "type": "app",
+    "owner": "savitarx7",
+    "assetBundlePatterns": ["**/*"],
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f0fad71c-a7c9-4c22-9356-33a6ca1b0c32"
+      }
+    },
     "android": {
       "package": "com.anonymous.genesisapp",
       "adaptiveIcon": {
@@ -23,24 +41,9 @@
         "googleMobileAdsAppId": "ca-app-pub-5506676208773786~4816873092"
       },
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads."
       }
-    },
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#000000"
-    },
-    "assetBundlePatterns": ["**/*"],
-    "extra": {
-      "eas": {
-        "projectId": "f0fad71c-a7c9-4c22-9356-33a6ca1b0c32"
-      }
-    },
-    "newArchEnabled": false,
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "owner": "savitarx7"
+    }
   }
 }
