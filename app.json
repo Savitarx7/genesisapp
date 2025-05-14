@@ -6,8 +6,6 @@
     "icon": "./assets/icon.png",
     "platforms": ["ios", "android"],
     "jsEngine": "hermes",
-    "newArchEnabled": false,
-    "type": "app",
     "owner": "savitarx7",
     "assetBundlePatterns": ["**/*"],
     "splash": {
