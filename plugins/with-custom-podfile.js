@@ -5,18 +5,26 @@ module.exports = function withCustomPodfile(config) {
     mods: {
       ios: {
         podfile(podfileConfig) {
-          if (
-            podfileConfig.contents &&
-            !podfileConfig.contents.includes('use_frameworks!')
-          ) {
-            podfileConfig.contents = podfileConfig.contents.replace(
-              /use_expo_modules!\(\)/,
-              `use_expo_modules!()\n  use_frameworks! :linkage => :static\n  use_modular_headers!`
-            );
+          if (!podfileConfig.contents) {
+            return podfileConfig; // avoid crash if contents is undefined
           }
+
+          const lines = podfileConfig.contents.split('\n');
+          const modifiedLines = lines.map(line => {
+            if (line.includes('use_expo_modules!()')) {
+              return `${line}\n  use_frameworks! :linkage => :static\n  use_modular_headers!`;
+            }
+            return line;
+          });
+
+          if (!modifiedLines.some(line => line.includes('use_modular_headers!'))) {
+            modifiedLines.unshift('use_modular_headers!');
+          }
+
+          podfileConfig.contents = modifiedLines.join('\n');
           return podfileConfig;
-        }
-      }
-    }
+        },
+      },
+    },
   };
 };
