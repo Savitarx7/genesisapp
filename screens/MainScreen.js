@@ -1,177 +1,192 @@
-// ✅ MainScreen.js — Final Version with Firebase Mining Sync + Hermes-safe import
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   TouchableOpacity,
+  StyleSheet,
   ImageBackground,
-  Alert
+  Modal,
+  Alert,
 } from 'react-native';
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
-import { useNavigation } from '@react-navigation/native';
-import {
-  RewardedAd,
-  RewardedAdEventType,
-  TestIds,
-  AdEventType
-} from 'react-native-google-mobile-ads';
-
-import matrixBackground from '../assets/matrix-background.gif';
+import { auth } from '../firebaseConfig';
+import { RewardedAd, RewardedAdEventType, TestIds } from 'react-native-google-mobile-ads';
+import { getDatabase, ref, get, set, update, onValue } from 'firebase/database';
 
 const adUnitId = __DEV__
   ? TestIds.REWARDED
   : 'ca-app-pub-5506676208773786/4493407648';
 
+const rewarded = RewardedAd.createForAdRequest(adUnitId, {
+  requestNonPersonalizedAdsOnly: true,
+});
+
+const backgroundImage = require('../assets/matrix-background.gif');
+
 const MainScreen = () => {
-  const navigation = useNavigation();
-  const user = auth().currentUser;
-  const [tokenCount, setTokenCount] = useState(0);
+  const [user, setUser] = useState(null);
   const [isMining, setIsMining] = useState(false);
-  const [startTime, setStartTime] = useState(null);
-  const [rewardedAdLoaded, setRewardedAdLoaded] = useState(false);
-  const [rewardedAd, setRewardedAd] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const [autoCounter, setAutoCounter] = useState(0);
+  const [totalTokens, setTotalTokens] = useState(0);
+
+  const rtdb = getDatabase();
 
   useEffect(() => {
-    if (user) {
-      const fetchTokens = async () => {
-        const doc = await firestore().collection('users').doc(user.uid).get();
-        if (doc.exists && doc.data().tokens) {
-          setTokenCount(doc.data().tokens);
-        }
-      };
-      fetchTokens();
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setUser(user);
+      if (user) {
+        const userRef = ref(rtdb, `mining_sessions/${user.uid}`);
+        onValue(userRef, (snapshot) => {
+          const data = snapshot.val();
+          if (data && data.totalTokens) {
+            setTotalTokens(data.totalTokens);
+          }
+        });
+      }
+    });
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    let interval;
+    if (isMining) {
+      interval = setInterval(() => {
+        setAutoCounter((prev) => prev + 1);
+      }, 1000);
     }
-  }, [user]);
+    return () => clearInterval(interval);
+  }, [isMining]);
+
+  const handleMinePress = () => {
+    if (!rewarded.loaded) {
+      rewarded.load();
+      Alert.alert('Ad not ready', 'Please try again in a few seconds.');
+      return;
+    }
+    rewarded.show();
+  };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (isMining && startTime) {
-        const timeElapsed = (Date.now() - startTime) / (1000 * 60 * 60);
-        const rate = 0.01 * Math.exp(-0.00001 * timeElapsed);
-        const newTotal = tokenCount + rate;
-        setTokenCount(newTotal);
+    const unsubscribeLoaded = rewarded.addAdEventListener(
+      RewardedAdEventType.LOADED,
+      () => console.log('Ad loaded')
+    );
+
+    const unsubscribeEarned = rewarded.addAdEventListener(
+      RewardedAdEventType.EARNED_REWARD,
+      () => {
+        setIsMining(true);
+        setShowPopup(true);
+        setTimeout(() => setShowPopup(false), 3000);
+
         if (user) {
-          firestore().collection('users').doc(user.uid).set(
-            { tokens: newTotal },
-            { merge: true }
-          );
+          const userRef = ref(rtdb, `mining_sessions/${user.uid}`);
+          get(userRef).then((snapshot) => {
+            const data = snapshot.val();
+            const previous = data?.totalTokens || 0;
+            const newTotal = previous + 0.01;
+            set(userRef, {
+              totalTokens: newTotal,
+              lastStart: Date.now(),
+            });
+            setTotalTokens(newTotal);
+          });
         }
       }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [isMining, startTime, tokenCount]);
+    );
 
-  const loadAd = () => {
-    const ad = RewardedAd.createForAdRequest(adUnitId);
-    ad.addAdEventListener(RewardedAdEventType.LOADED, () => {
-      setRewardedAdLoaded(true);
-    });
-    ad.addAdEventListener(RewardedAdEventType.EARNED_REWARD, () => {
-      Alert.alert('✅', 'Mining started: 0.01/hr for 24 hrs');
-      setStartTime(Date.now());
-      setIsMining(true);
-    });
-    ad.addAdEventListener(AdEventType.CLOSED, () => {
-      setRewardedAdLoaded(false);
-      setRewardedAd(null);
-    });
-    ad.load();
-    setRewardedAd(ad);
-  };
+    const unsubscribeClosed = rewarded.addAdEventListener(
+      RewardedAdEventType.CLOSED,
+      () => rewarded.load()
+    );
 
-  const onMinePressed = () => {
-    if (!rewardedAdLoaded) {
-      loadAd();
-      Alert.alert('Loading...', 'Ad is being prepared. Tap MINE again shortly.');
-    } else {
-      rewardedAd?.show().catch(() => {
-        Alert.alert('Error', 'Could not show ad. Try again later.');
-      });
-    }
-  };
+    rewarded.load();
+
+    return () => {
+      unsubscribeLoaded();
+      unsubscribeEarned();
+      unsubscribeClosed();
+    };
+  }, [user]);
 
   return (
-    <ImageBackground source={matrixBackground} style={styles.background} resizeMode="cover">
-      <View style={styles.overlay}>
-        <Text style={styles.projectTitle}>PROJECT GENESIS</Text>
-        <View style={styles.counterContainer}>
-          <Text style={styles.counterLabel}>TOTAL MINED</Text>
-          <Text style={styles.counter}>{tokenCount.toFixed(2)}</Text>
-        </View>
-        <Text style={styles.matrixText}>Tap to escape the Matrix</Text>
-        <TouchableOpacity style={styles.button} onPress={onMinePressed}>
-          <Text style={styles.buttonText}>MINE</Text>
+    <ImageBackground source={backgroundImage} style={styles.background}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Project Genesis</Text>
+        <Text style={styles.subtitle}>Tap to escape the Matrix</Text>
+        <TouchableOpacity style={styles.mineButton} onPress={handleMinePress}>
+          <Text style={styles.mineText}>MINE</Text>
         </TouchableOpacity>
-        <Text style={styles.miningText}>
-          {isMining ? `Mining started` : 'Mining paused'}
-        </Text>
-        <TouchableOpacity
-          style={[styles.button, { marginTop: 30, backgroundColor: '#0F0' }]}
-          onPress={() => navigation.navigate('Game')}
-        >
-          <Text style={[styles.buttonText, { color: '#000' }]}>BOOT ARCADE</Text>
-        </TouchableOpacity>
+        <Text style={styles.counterText}>Auto Counter: {autoCounter}</Text>
+        <Text style={styles.counterText}>Total Tokens: {totalTokens.toFixed(2)}</Text>
+        <Modal transparent visible={showPopup} animationType="fade">
+          <View style={styles.popupContainer}>
+            <View style={styles.popup}>
+              <Text style={styles.popupText}>
+                Mining started: 0.01 per hour for 24 hours
+              </Text>
+            </View>
+          </View>
+        </Modal>
       </View>
     </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  background: { flex: 1, backgroundColor: '#000' },
-  overlay: {
+  background: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
+  container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.6)'
+    paddingHorizontal: 20,
   },
-  projectTitle: {
-    fontSize: 36,
-    color: '#0F0',
+  title: {
+    fontSize: 34,
     fontWeight: 'bold',
-    textShadowColor: '#0F0',
-    textShadowRadius: 20,
-    marginBottom: 50
-  },
-  counterContainer: {
-    backgroundColor: 'rgba(0,255,0,0.1)',
-    borderWidth: 2,
-    borderColor: '#0F0',
-    paddingVertical: 10,
-    paddingHorizontal: 40,
-    borderRadius: 15,
-    marginBottom: 40,
-    alignItems: 'center'
-  },
-  counterLabel: { fontSize: 18, color: '#0F0', marginBottom: 5 },
-  counter: { fontSize: 28, color: '#0F0', fontWeight: 'bold' },
-  matrixText: {
-    fontSize: 16,
-    color: '#0F0',
+    color: '#00ff00',
     marginBottom: 10,
-    textShadowColor: '#0F0',
-    textShadowRadius: 10
   },
-  button: {
-    backgroundColor: '#000',
-    borderColor: '#0F0',
-    borderWidth: 2,
-    paddingHorizontal: 40,
-    paddingVertical: 15,
-    borderRadius: 10,
-    shadowColor: '#0F0',
-    shadowOpacity: 0.9,
-    shadowRadius: 15
-  },
-  buttonText: { fontSize: 20, color: '#0F0', fontWeight: 'bold' },
-  miningText: {
-    marginTop: 20,
+  subtitle: {
     fontSize: 18,
-    color: '#0F0',
-    textShadowColor: '#0F0',
-    textShadowRadius: 10
-  }
+    color: '#00ff00',
+    marginBottom: 20,
+  },
+  mineButton: {
+    backgroundColor: '#00ff00',
+    paddingVertical: 15,
+    paddingHorizontal: 40,
+    borderRadius: 10,
+  },
+  mineText: {
+    color: '#000',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  counterText: {
+    color: '#fff',
+    marginTop: 10,
+  },
+  popupContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  popup: {
+    backgroundColor: '#000',
+    borderColor: '#00ff00',
+    borderWidth: 2,
+    padding: 20,
+    borderRadius: 10,
+  },
+  popupText: {
+    color: '#00ff00',
+    fontSize: 16,
+  },
 });
 
 export default MainScreen;

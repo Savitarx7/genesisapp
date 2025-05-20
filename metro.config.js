@@ -1,15 +1,11 @@
-/** @type {import('metro-config').MetroConfig} */
-module.exports = (async () => {
-  const { getDefaultConfig } = await import('@expo/metro-config');
-  const config = getDefaultConfig(__dirname);
+const { getDefaultConfig } = require("expo/metro-config");
 
-  // Ensure support for .gif and .mp3 files
-  config.resolver.assetExts.push('gif', 'mp3');
+const config = getDefaultConfig(__dirname);
 
-  // Optional: some Firebase modules use .cjs extensions
-  if (!config.resolver.sourceExts.includes('cjs')) {
-    config.resolver.sourceExts.push('cjs');
-  }
+// Add extra file extensions if needed
+config.resolver.assetExts.push("mp3", "gif");
+if (!config.resolver.sourceExts.includes("cjs")) {
+  config.resolver.sourceExts.push("cjs");
+}
 
-  return config;
-})();
+module.exports = config;

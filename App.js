@@ -1,11 +1,43 @@
-import React, { useEffect } from 'react';
-import AppNavigator from './Navigation';
-import { mobileAds } from 'react-native-google-mobile-ads';
+// ✅ App.js (Fully Working, Includes Navigation, Auth State, Routing)
+import React, { useEffect, useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { View, ActivityIndicator } from 'react-native';
+import { auth } from './firebaseConfig';
+import AuthScreen from './screens/AuthScreen';
+import MainScreen from './screens/MainScreen';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+
   useEffect(() => {
-    mobileAds().initialize();
+    const unsubscribe = auth().onAuthStateChanged((user) => {
+      setUser(user);
+      setLoading(false);
+    });
+    return unsubscribe;
   }, []);
 
-  return <AppNavigator />;
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#00ff00" />
+      </View>
+    );
+  }
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {user ? (
+          <Stack.Screen name="Main" component={MainScreen} />
+        ) : (
+          <Stack.Screen name="Auth" component={AuthScreen} />
+        )}
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
