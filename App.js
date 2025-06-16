@@ -1,11 +1,12 @@
-// ✅ App.js (Fully Working, Includes Navigation, Auth State, Routing)
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { onAuthStateChanged } from 'firebase/auth';
 import { View, ActivityIndicator } from 'react-native';
-import { auth } from './firebaseConfig';
+
 import AuthScreen from './screens/AuthScreen';
 import MainScreen from './screens/MainScreen';
+import { auth } from './firebaseConfig';
 
 const Stack = createNativeStackNavigator();
 
@@ -14,7 +15,7 @@ export default function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const unsubscribe = auth().onAuthStateChanged((user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       setLoading(false);
     });

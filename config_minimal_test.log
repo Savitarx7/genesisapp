@@ -1,0 +1,17 @@
+C:\Users\Basic\GenesisApp\node_modules\getenv\index.js:70
+        throw new Error('GetEnv.NoBoolean: ' + value + ' is not a boolean.');
+        ^
+
+Error: GetEnv.NoBoolean:  # Optional: unset the variable afterwards is not a boolean.
+    at Object.boolish (C:\Users\Basic\GenesisApp\node_modules\getenv\index.js:70:15)
+    at Function.boolish (C:\Users\Basic\GenesisApp\node_modules\getenv\index.js:84:27)
+    at Object.<anonymous> (C:\Users\Basic\GenesisApp\node_modules\@expo\cli\build\bin\cli:34:18)
+    at Module._compile (node:internal/modules/cjs/loader:1554:14)
+    at Object..js (node:internal/modules/cjs/loader:1706:10)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+    at Function._load (node:internal/modules/cjs/loader:1108:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.require (node:internal/modules/cjs/loader:1311:12)
+
+Node.js v22.14.0

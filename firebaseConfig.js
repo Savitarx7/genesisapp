@@ -1,13 +1,8 @@
-// firebaseConfig.js
+// firebaseConfig.js (✅ Web SDK version - correct for Expo/EAS)
 import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getDatabase } from 'firebase/database';
-import {
-  getAuth,
-  initializeAuth,
-  getReactNativePersistence,
-} from 'firebase/auth';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCHBy4Kn_2grKrXriqYDsPhsoepnHv04_Y',
@@ -17,20 +12,12 @@ const firebaseConfig = {
   messagingSenderId: '641263152953',
   appId: '1:641263152953:web:3c11dd773c4dfcd30382e8',
   measurementId: 'G-HEXF9WRBWF',
-  databaseURL: 'https://genesis-3f594-default-rtdb.firebaseio.com/',
+  databaseURL: 'https://genesis-3f594-default-rtdb.firebaseio.com/'
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const db = getFirestore(app);
 const rtdb = getDatabase(app);
-
-let auth;
-try {
-  auth = initializeAuth(app, {
-    persistence: getReactNativePersistence(AsyncStorage),
-  });
-} catch (e) {
-  auth = getAuth(app);
-}
 
 export { app, auth, db, rtdb };

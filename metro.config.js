@@ -1,11 +1,7 @@
-const { getDefaultConfig } = require("expo/metro-config");
+const { getDefaultConfig } = require('expo/metro-config');
 
-const config = getDefaultConfig(__dirname);
-
-// Add extra file extensions if needed
-config.resolver.assetExts.push("mp3", "gif");
-if (!config.resolver.sourceExts.includes("cjs")) {
-  config.resolver.sourceExts.push("cjs");
-}
-
-module.exports = config;
+module.exports = (() => {
+  const config = getDefaultConfig(__dirname);
+  config.resolver.sourceExts = [...config.resolver.sourceExts, 'cjs'];
+  return config;
+})();

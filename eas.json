@@ -18,14 +18,20 @@
       }
     },
     "production": {
+      "developmentClient": false,
+      "distribution": "store",
+      "autoIncrement": true,
       "ios": {
-        "simulator": false
+        "simulator": false,
+        "resourceClass": "m1-medium"
       },
-      "autoIncrement": true
+      "env": {
+        "NODE_ENV": "production"
+      },
+      "node": "22.x.x" // <--- CHANGED TO 22.x.x
     }
   },
   "submit": {
     "production": {}
   }
 }
-

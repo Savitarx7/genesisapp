@@ -1,26 +1,30 @@
-// plugins/with-custom-podfile.js
 module.exports = function withCustomPodfile(config) {
   return {
     ...config,
     mods: {
       ios: {
         podfile(podfileConfig) {
-          if (!podfileConfig.contents) {
-            return podfileConfig; // Avoid crash
+          if (!podfileConfig.contents.includes('use_frameworks!')) {
+            podfileConfig.contents = podfileConfig.contents.replace(
+              /use_expo_modules!\(\)/,
+              `use_expo_modules!()\n  use_frameworks! :linkage => :static\n  use_modular_headers!`
+            );
           }
 
           const lines = podfileConfig.contents.split('\n');
-          const modifiedLines = [];
-
-          for (let line of lines) {
-            if (line.includes('use_expo_modules!()')) {
-              modifiedLines.push('use_modular_headers!');
-              modifiedLines.push('use_frameworks! :linkage => :static');
+          const patchedLines = lines.map((line) => {
+            if (
+              line.includes("pod 'FirebaseAuth'") ||
+              line.includes("pod 'FirebaseCoreInternal'") ||
+              line.includes("pod 'FirebaseFirestore'") ||
+              line.includes("pod 'GoogleUtilities'")
+            ) {
+              return line.replace(/(pod\\s+['\"][^'\"]+['\"])/, `$1, :modular_headers => true`);
             }
-            modifiedLines.push(line);
-          }
+            return line;
+          });
 
-          podfileConfig.contents = modifiedLines.join('\n');
+          podfileConfig.contents = patchedLines.join('\n');
           return podfileConfig;
         },
       },

@@ -1,3 +1,4 @@
+// ✅ Updated MainScreen.js — using Web SDK-compatible Firebase
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -8,9 +9,14 @@ import {
   Modal,
   Alert,
 } from 'react-native';
-import { auth } from '../firebaseConfig';
-import { RewardedAd, RewardedAdEventType, TestIds } from 'react-native-google-mobile-ads';
-import { getDatabase, ref, get, set, update, onValue } from 'firebase/database';
+import { auth, rtdb } from '../firebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
+import { ref, get, set, onValue } from 'firebase/database';
+import {
+  RewardedAd,
+  RewardedAdEventType,
+  TestIds,
+} from 'react-native-google-mobile-ads';
 
 const adUnitId = __DEV__
   ? TestIds.REWARDED
@@ -29,13 +35,11 @@ const MainScreen = () => {
   const [autoCounter, setAutoCounter] = useState(0);
   const [totalTokens, setTotalTokens] = useState(0);
 
-  const rtdb = getDatabase();
-
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setUser(user);
-      if (user) {
-        const userRef = ref(rtdb, `mining_sessions/${user.uid}`);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      if (currentUser) {
+        const userRef = ref(rtdb, `mining_sessions/${currentUser.uid}`);
         onValue(userRef, (snapshot) => {
           const data = snapshot.val();
           if (data && data.totalTokens) {
@@ -44,7 +48,7 @@ const MainScreen = () => {
         });
       }
     });
-    return unsubscribe;
+    return () => unsubscribe();
   }, []);
 
   useEffect(() => {
@@ -118,7 +122,9 @@ const MainScreen = () => {
           <Text style={styles.mineText}>MINE</Text>
         </TouchableOpacity>
         <Text style={styles.counterText}>Auto Counter: {autoCounter}</Text>
-        <Text style={styles.counterText}>Total Tokens: {totalTokens.toFixed(2)}</Text>
+        <Text style={styles.counterText}>
+          Total Tokens: {totalTokens.toFixed(2)}
+        </Text>
         <Modal transparent visible={showPopup} animationType="fade">
           <View style={styles.popupContainer}>
             <View style={styles.popup}>
