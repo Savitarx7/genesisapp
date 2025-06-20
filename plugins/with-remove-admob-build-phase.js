@@ -1,28 +1,37 @@
 // plugins/with-remove-admob-build-phase.js
 const { withXcodeProject } = require('@expo/config-plugins');
-// You also need to import the PBXBuildPhase type if you are directly accessing it
-// It's more robust to iterate through build phases and check the type explicitly
 
 function removeGoogleMobileAdsBuildPhase(config) {
   return withXcodeProject(config, async (config) => {
     const xcodeProject = config.modResults;
-
-    const target = xcodeProject.getFirstTarget().uuid;
-    // Iterate through all build phases for the target
-    const buildPhases = xcodeProject.getBuildPhases(target); // Use getBuildPhases
-
-    if (!buildPhases) {
-      console.warn("No build phases found to check for AdMob removal.");
-      return config;
-    }
+    const targetUuid = xcodeProject.getFirstTarget().uuid; // Get the main target UUID
 
     let foundAndRemoved = false;
-    for (const phaseUuid in buildPhases) {
-      const phase = xcodeProject.get_PBXBuildPhase(phaseUuid); // Get the specific phase object
+    const buildPhaseSection = xcodeProject.pbxBuildPhaseSection(); // Get all build phases
 
+    for (const uuid in buildPhaseSection) {
+      // Skip comments or non-phase properties
+      if (uuid.endsWith('_comment')) continue;
+
+      const phase = buildPhaseSection[uuid];
+
+      // Check if it's a shell script build phase and contains the problematic script
       if (phase.isa === 'PBXShellScriptBuildPhase' && phase.shellScript && phase.shellScript.includes('[RNGoogleMobileAds] Configuration')) {
         console.log(`Removing problematic AdMob build phase: ${phase.shellScript}`);
-        xcodeProject.removeBuildPhase(target, phase.isa, phaseUuid); // Use phase.isa and uuid
+        
+        // Remove the phase reference from the target's build phases list
+        const buildPhases = xcodeProject.getBuildPhase(targetUuid); // This gets the array of build phase UUIDs for the target
+        if (buildPhases) {
+          const phaseIndex = buildPhases.indexOf(uuid);
+          if (phaseIndex > -1) {
+            buildPhases.splice(phaseIndex, 1);
+          }
+        }
+        
+        // Also remove the actual build phase object from the section
+        delete buildPhaseSection[uuid];
+        delete buildPhaseSection[uuid + '_comment']; // Remove its comment too if present
+
         foundAndRemoved = true;
         break; // Assuming there's only one such phase
       }
