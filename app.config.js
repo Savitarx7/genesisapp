@@ -33,15 +33,15 @@ export default {
     web: {
       bundler: 'metro',
     },
-    // ALL THREE PLUGINS ARE UNCOMMENTED HERE
+    // The react-native-google-mobile-ads plugin is now COMMENTED OUT
     plugins: [
-      [
-        'react-native-google-mobile-ads',
-        {
-          ios_app_id: 'ca-app-pub-5506676208773786~5792481604', // Make sure this is your actual iOS App ID
-          android_app_id: 'ca-app-pub-5506676208773786~4366691423', // Make sure this is your actual Android App ID
-        },
-      ],
+      // [
+      //   'react-native-google-mobile-ads',
+      //   {
+      //     ios_app_id: 'ca-app-pub-5506676208773786~5792481604',
+      //     android_app_id: 'ca-app-pub-5506676208773786~4366691423',
+      //   },
+      // ],
       [
         'expo-build-properties',
         {
