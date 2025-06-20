@@ -15,7 +15,7 @@ export default {
       bundleIdentifier: 'com.adrianpavlick8.genesisapp',
       buildNumber: '1',
       supportsTablet: true,
-      googleServicesFile: './GoogleService-Info.plist',
+      // googleServicesFile: './GoogleService-Info.plist', // Commented out temporarily
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
         NSUserTrackingUsageDescription:
@@ -28,34 +28,13 @@ export default {
         foregroundImage: './assets/icon.png',
         backgroundColor: '#000000',
       },
-      googleServicesFile: './google-services.json',
+      // googleServicesFile: './google-services.json', // Commented out temporarily
     },
     web: {
       bundler: 'metro',
     },
-    // Only your new custom AdMob plugin is UNCOMMENTED here
-    plugins: [
-      // 'react-native-google-mobile-ads', // COMMENTED OUT
-      // [ // expo-build-properties is COMMENTED OUT
-      //   'expo-build-properties',
-      //   {
-      //     ios: {
-      //       useFrameworks: 'static',
-      //     },
-      //   },
-      // ],
-      // './plugins/with-custom-podfile.js', // COMMENTED OUT
-      './plugins/with-admob-app-id.js', // UNCOMMENTED
-    ],
-    extra: {
-      eas: {
-        projectId: 'f0fad71c-a7c9-4c22-9356-33a6ca1b0c32',
-      },
-      reactNativeGoogleMobileAds: {
-        ios_app_id: 'ca-app-pub-5506676208773786~5792481604',
-        android_app_id: 'ca-app-pub-5506676208773786~4366691423'
-      }
-    },
+    // IMPORTANT: No plugins array here
+    // IMPORTANT: No extra.reactNativeGoogleMobileAds here
     jsEngine: 'hermes',
   },
 };
