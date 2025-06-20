@@ -5,32 +5,33 @@ function removeGoogleMobileAdsBuildPhase(config) {
   return withXcodeProject(config, async (config) => {
     const xcodeProject = config.modResults;
     const targetUuid = xcodeProject.getFirstTarget().uuid; // Get the main target UUID
+    const target = xcodeProject.getFirstTarget().target; // Get the target object
 
     let foundAndRemoved = false;
-    const buildPhaseSection = xcodeProject.pbxBuildPhaseSection(); // Get all build phases
-
-    for (const uuid in buildPhaseSection) {
-      // Skip comments or non-phase properties
+    
+    // Iterate directly through the PBXBuildPhase section to find the script phase
+    for (const uuid in xcodeProject.hash.project.objects.PBXShellScriptBuildPhase) {
+      // Skip comments or internal properties
       if (uuid.endsWith('_comment')) continue;
 
-      const phase = buildPhaseSection[uuid];
+      const phase = xcodeProject.hash.project.objects.PBXShellScriptBuildPhase[uuid];
 
-      // Check if it's a shell script build phase and contains the problematic script
-      if (phase.isa === 'PBXShellScriptBuildPhase' && phase.shellScript && phase.shellScript.includes('[RNGoogleMobileAds] Configuration')) {
+      if (phase.shellScript && phase.shellScript.includes('[RNGoogleMobileAds] Configuration')) {
         console.log(`Removing problematic AdMob build phase: ${phase.shellScript}`);
         
-        // Remove the phase reference from the target's build phases list
-        const buildPhases = xcodeProject.getBuildPhase(targetUuid); // This gets the array of build phase UUIDs for the target
-        if (buildPhases) {
-          const phaseIndex = buildPhases.indexOf(uuid);
+        // Remove the phase from the target's buildPhases list
+        const buildPhasesArray = xcodeProject.get    
+        BuildPhase(targetUuid); // This should return the array of build phase UUIDs for the target
+        if (buildPhasesArray) {
+          const phaseIndex = buildPhasesArray.indexOf(uuid);
           if (phaseIndex > -1) {
-            buildPhases.splice(phaseIndex, 1);
+            buildPhasesArray.splice(phaseIndex, 1);
           }
         }
         
-        // Also remove the actual build phase object from the section
-        delete buildPhaseSection[uuid];
-        delete buildPhaseSection[uuid + '_comment']; // Remove its comment too if present
+        // Remove the phase object itself from the project's objects section
+        delete xcodeProject.hash.project.objects.PBXShellScriptBuildPhase[uuid];
+        delete xcodeProject.hash.project.objects.PBXShellScriptBuildPhase[uuid + '_comment'];
 
         foundAndRemoved = true;
         break; // Assuming there's only one such phase
