@@ -33,26 +33,26 @@ export default {
     web: {
       bundler: 'metro',
     },
-    // Only react-native-google-mobile-ads is UNCOMMENTED here
+    // react-native-google-mobile-ads plugin is now COMMENTED OUT
     plugins: [
-      'react-native-google-mobile-ads', // UNCOMMENTED
-      // [ // expo-build-properties is COMMENTED OUT
-      //   'expo-build-properties',
-      //   {
-      //     ios: {
-      //       useFrameworks: 'static',
-      //     },
-      //   },
-      // ],
-      // './plugins/with-custom-podfile.js', // COMMENTED OUT
+      // 'react-native-google-mobile-ads', // COMMENTED OUT
+      [
+        'expo-build-properties',
+        {
+          ios: {
+            useFrameworks: 'static',
+          },
+        },
+      ],
+      './plugins/with-custom-podfile.js',
     ],
     extra: {
       eas: {
         projectId: 'f0fad71c-a7c9-4c22-9356-33a6ca1b0c32',
       },
       reactNativeGoogleMobileAds: {
-        ios_app_id: 'ca-app-pub-5506676208773786~5792481604',
-        android_app_id: 'ca-app-pub-5506676208773786~4366691423'
+        ios_app_id: 'ca-app-pub-5506676208773786~5792481604', // Your actual iOS AdMob App ID
+        android_app_id: 'ca-app-pub-5506676208773786~4366691423' // Your actual Android AdMob App ID
       }
     },
     jsEngine: 'hermes',
