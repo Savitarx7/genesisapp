@@ -33,10 +33,9 @@ export default {
     web: {
       bundler: 'metro',
     },
-    // ALL THREE PLUGINS ARE UNCOMMENTED HERE
+    // The custom Podfile plugin is now COMMENTED OUT
     plugins: [
-      // The AdMob plugin itself. It will now read its App IDs from the 'extra' object below.
-      'react-native-google-mobile-ads',
+      'react-native-google-mobile-ads', // UNCOMMENTED
       [
         'expo-build-properties',
         {
@@ -44,17 +43,16 @@ export default {
             useFrameworks: 'static',
           },
         },
-      ],
-      './plugins/with-custom-podfile.js',
+      ], // UNCOMMENTED
+      // './plugins/with-custom-podfile.js', // COMMENTED OUT
     ],
     extra: {
       eas: {
         projectId: 'f0fad71c-a7c9-4c22-9356-33a6ca1b0c32',
       },
-      // ADMOB APP IDs ARE PLACED HERE
       reactNativeGoogleMobileAds: {
-        ios_app_id: 'ca-app-pub-5506676208773786~5792481604', // Your actual iOS AdMob App ID
-        android_app_id: 'ca-app-pub-5506676208773786~4366691423' // Your actual Android AdMob App ID
+        ios_app_id: 'ca-app-pub-5506676208773786~5792481604',
+        android_app_id: 'ca-app-pub-5506676208773786~4366691423'
       }
     },
     jsEngine: 'hermes',
