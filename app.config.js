@@ -33,18 +33,18 @@ export default {
     web: {
       bundler: 'metro',
     },
-    // The custom Podfile plugin is now COMMENTED OUT
+    // Only react-native-google-mobile-ads is UNCOMMENTED here
     plugins: [
       'react-native-google-mobile-ads', // UNCOMMENTED
-      [
-        'expo-build-properties',
-        {
-          ios: {
-            useFrameworks: 'static',
-          },
-        },
-      ], // UNCOMMENTED
-      // './plugins/with-custom-podfile.js', // COMMENTED OUT
+      // [ // expo-build-properties is now COMMENTED OUT
+      //   'expo-build-properties',
+      //   {
+      //     ios: {
+      //       useFrameworks: 'static',
+      //     },
+      //   },
+      // ],
+      // './plugins/with-custom-podfile.js', // Still COMMENTED OUT from previous test
     ],
     extra: {
       eas: {
