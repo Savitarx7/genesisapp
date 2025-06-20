@@ -33,12 +33,16 @@ export default {
     web: {
       bundler: 'metro',
     },
-    // ALL THREE PLUGINS ARE UNCOMMENTED HERE
+    // The react-native-google-mobile-ads plugin is now COMMENTED OUT
     plugins: [
-      // The AdMob plugin itself, but WITHOUT the app_ids here.
-      // It will read them from the 'extra' object below.
-      'react-native-google-mobile-ads',
-      [
+      // [ // COMMENTED OUT
+      //   'react-native-google-mobile-ads',
+      //   {
+      //     ios_app_id: 'ca-app-pub-5506676208773786~5792481604',
+      //     android_app_id: 'ca-app-pub-5506676208773786~4366691423',
+      //   },
+      // ],
+      [ // UNCOMMENTED
         'expo-build-properties',
         {
           ios: {
@@ -46,16 +50,16 @@ export default {
           },
         },
       ],
-      './plugins/with-custom-podfile.js',
+      './plugins/with-custom-podfile.js', // UNCOMMENTED
     ],
     extra: {
       eas: {
         projectId: 'f0fad71c-a7c9-4c22-9356-33a6ca1b0c32',
       },
-      // ADD THE ADMOB APP IDS HERE for the plugin to find
+      // Keep AdMob IDs here, even though the plugin is commented out, for consistency
       reactNativeGoogleMobileAds: {
-        ios_app_id: 'ca-app-pub-5506676208773786~5792481604', // Your actual iOS AdMob App ID
-        android_app_id: 'ca-app-pub-5506676208773786~4366691423' // Your actual Android AdMob App ID
+        ios_app_id: 'ca-app-pub-5506676208773786~5792481604',
+        android_app_id: 'ca-app-pub-5506676208773786~4366691423'
       }
     },
     jsEngine: 'hermes',
