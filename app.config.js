@@ -36,7 +36,7 @@ export default {
     // Only react-native-google-mobile-ads is UNCOMMENTED here
     plugins: [
       'react-native-google-mobile-ads', // UNCOMMENTED
-      // [ // expo-build-properties is now COMMENTED OUT
+      // [ // expo-build-properties is COMMENTED OUT
       //   'expo-build-properties',
       //   {
       //     ios: {
@@ -44,7 +44,7 @@ export default {
       //     },
       //   },
       // ],
-      // './plugins/with-custom-podfile.js', // Still COMMENTED OUT from previous test
+      // './plugins/with-custom-podfile.js', // COMMENTED OUT
     ],
     extra: {
       eas: {
