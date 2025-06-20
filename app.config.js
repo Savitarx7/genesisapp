@@ -34,7 +34,11 @@ export default {
       bundler: 'metro',
     },
     // IMPORTANT: No plugins array here
-    // IMPORTANT: No extra.reactNativeGoogleMobileAds here
+    extra: { // ADD THIS 'extra' OBJECT BACK
+      eas: {
+        projectId: "f0fad71c-a7c9-4c22-9356-33a6ca1b0c32" // ADD THIS PROJECT ID
+      }
+    },
     jsEngine: 'hermes',
   },
 };
