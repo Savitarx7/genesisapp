@@ -15,13 +15,16 @@ export default {
       bundleIdentifier: 'com.adrianpavlick8.genesisapp',
       buildNumber: '1',
       supportsTablet: true,
-      // Temporarily comment out if Firebase plugins are problematic
-      // googleServicesFile: './GoogleService-Info.plist',
+      // IMPORTANT: Firebase `googleServicesFile` paths.
+      // These are usually handled by Firebase plugins. If the build fails later due to Firebase,
+      // you might need to reconsider activating a Firebase config plugin, or manually patching
+      // these files in a prebuild step if the plugins cause app.config.js parsing errors.
+      googleServicesFile: './GoogleService-Info.plist', // Keep uncommented if this was original state
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
         NSUserTrackingUsageDescription:
           'This identifier will be used to deliver personalized ads.',
-        GADApplicationIdentifier: 'ca-app-pub-5506676208773786~5792481604', // Keep this for iOS AdMob native config
+        GADApplicationIdentifier: 'ca-app-pub-5506676208773786~5792481604', // Keep this for direct Info.plist injection for iOS AdMob
       },
     },
     android: {
@@ -30,18 +33,39 @@ export default {
         foregroundImage: './assets/icon.png',
         backgroundColor: '#000000',
       },
-      // Temporarily comment out if Firebase plugins are problematic
-      // googleServicesFile: './google-services.json',
+      // IMPORTANT: Firebase `googleServicesFile` paths.
+      // See comment above for iOS.
+      googleServicesFile: './google-services.json', // Keep uncommented if this was original state
     },
     web: {
       bundler: 'metro',
     },
-    // IMPORTANT: The 'plugins' array is COMPLETELY REMOVED here
+    // The Reddit fix: react-native-google-mobile-ads configuration directly under 'expo'
+    'react-native-google-mobile-ads': {
+      ios_app_id: 'ca-app-pub-5506676208773786~5792481604',
+      android_app_id: 'ca-app-pub-5506676208773786~4366691423'
+    },
+    // Re-activating original plugins.
+    // WARNING: This is where the 'Failed to read app config' error likely originated.
+    plugins: [
+      // The original 'react-native-google-mobile-ads' plugin should NOT be in this array
+      // as it caused the parsing error. Its config is now handled at the 'expo' level.
+      [
+        'expo-build-properties', // Re-activating
+        {
+          ios: {
+            useFrameworks: 'static', // For static frameworks (needed for Firebase/Hermes)
+          },
+        },
+      ],
+      './plugins/with-custom-podfile.js', // Re-activating your custom Podfile plugin
+    ],
     extra: {
       eas: {
         projectId: 'f0fad71c-a7c9-4c22-9356-33a6ca1b0c32',
       },
-      reactNativeGoogleMobileAds: { // Keep this for JS code to access IDs
+      // Keep extra.reactNativeGoogleMobileAds for JavaScript runtime access
+      reactNativeGoogleMobileAds: {
         ios_app_id: 'ca-app-pub-5506676208773786~5792481604',
         android_app_id: 'ca-app-pub-5506676208773786~4366691423'
       }
