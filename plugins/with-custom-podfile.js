@@ -1,37 +1,42 @@
-const { withPodfile } = require('@expo/config-plugins');
+const { withDangerousMod } = require('@expo/config-plugins');
+const fs = require('fs');
+const path = require('path');
 
 const withCustomPodfile = (config) => {
-  return withPodfile(config, (podfileConfig) => {
-    // Add use_frameworks! if not present
-    if (!podfileConfig.contents.includes('use_frameworks!')) {
-      podfileConfig.contents = podfileConfig.contents.replace(
-        /use_expo_modules!\(\)/,
-        `use_expo_modules!()\n  use_frameworks! :linkage => :static`
-      );
-    }
+  return withDangerousMod(config, [
+    'ios',
+    (cfg) => {
+      const podfilePath = path.join(cfg.modRequest.platformProjectRoot, 'Podfile');
+      let contents = fs.readFileSync(podfilePath, 'utf8');
 
-    // Add :modular_headers => true to specific Firebase pods
-    const lines = podfileConfig.contents.split('\n');
-    const patchedLines = lines.map((line) => {
-      if (
-        line.includes("pod 'FirebaseAuth'") ||
-        line.includes("pod 'FirebaseCoreInternal'") ||
-        line.includes("pod 'FirebaseFirestore'") ||
-        line.includes("pod 'GoogleUtilities'")
-      ) {
-        if (line.includes(':modular_headers => true')) {
-          return line; // Avoids adding it twice
-        }
-        // Safely add the modular_headers property
-        return line.replace(/(pod\s+['"][^'"]+['\"])/, `$1, :modular_headers => true`);
+      if (!contents.includes('use_frameworks!')) {
+        contents = contents.replace(
+          /use_expo_modules!\(\)/,
+          `use_expo_modules!()\n  use_frameworks! :linkage => :static`
+        );
       }
-      return line;
-    });
 
-    podfileConfig.contents = patchedLines.join('\n');
-    
-    return podfileConfig;
-  });
+      const lines = contents.split('\n');
+      const patchedLines = lines.map((line) => {
+        if (
+          line.includes("pod 'FirebaseAuth'") ||
+          line.includes("pod 'FirebaseCoreInternal'") ||
+          line.includes("pod 'FirebaseFirestore'") ||
+          line.includes("pod 'GoogleUtilities'")
+        ) {
+          if (line.includes(':modular_headers => true')) {
+            return line;
+          }
+          return line.replace(/(pod\s+['"][^'"]+['\"])/, `$1, :modular_headers => true`);
+        }
+        return line;
+      });
+
+      fs.writeFileSync(podfilePath, patchedLines.join('\n'));
+
+      return cfg;
+    },
+  ]);
 };
 
 module.exports = withCustomPodfile;
