@@ -22,15 +22,10 @@ const withAdMobAndroid = (config) => {
       // Ensure the <application> tag exists
       const application = AndroidConfig.Manifest.getApplication(cfg.modResults);
       if (application) {
-        AndroidConfig.Manifest.add               
-          (application,             
-            'meta-data',
-          [  
-            {
-              'android:name': 'com.google.android.gms.ads.APPLICATION_ID',
-              'android:value': adMobAppId,
-            },
-          ]
+        AndroidConfig.Manifest.addMetaDataItem(
+          application,
+          'com.google.android.gms.ads.APPLICATION_ID',
+          adMobAppId,
         );
       } else {
         console.warn("Android <application> tag not found in manifest.");
