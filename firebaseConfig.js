@@ -9,7 +9,6 @@ const firebaseConfig = {
   authDomain: 'genesis-3f594.firebaseapp.com',
   projectId: 'genesis-3f594',
   storageBucket: 'genesis-3f594.appspot.com',
-  messagingSenderId: '641263152953',
   appId: '1:641263152953:web:3c11dd773c4dfcd30382e8',
   measurementId: 'G-HEXF9WRBWF',
   databaseURL: 'https://genesis-3f594-default-rtdb.firebaseio.com/'
