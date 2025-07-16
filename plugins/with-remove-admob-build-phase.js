@@ -20,13 +20,10 @@ function removeGoogleMobileAdsBuildPhase(config) {
         console.log(`Removing problematic AdMob build phase: ${phase.shellScript}`);
         
         // Remove the phase from the target's buildPhases list
-        const buildPhasesArray = xcodeProject.get    
-        BuildPhase(targetUuid); // This should return the array of build phase UUIDs for the target
-        if (buildPhasesArray) {
-          const phaseIndex = buildPhasesArray.indexOf(uuid);
-          if (phaseIndex > -1) {
-            buildPhasesArray.splice(phaseIndex, 1);
-          }
+        const buildPhasesArray = target.buildPhases || [];
+        const phaseIndex = buildPhasesArray.indexOf(uuid);
+        if (phaseIndex > -1) {
+          buildPhasesArray.splice(phaseIndex, 1);
         }
         
         // Remove the phase object itself from the project's objects section
