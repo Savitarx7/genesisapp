@@ -24,10 +24,19 @@ jest.mock('@expo/config-plugins', () => {
         },
       },
     },
-    withPodfile: (config, cb) => {
-      const res = cb({ contents: config.podfile });
-      config.podfile = res.contents;
-      return config;
+    withDangerousMod: (config, [platform, action]) => {
+      const fs = require('fs');
+      const os = require('os');
+      const path = require('path');
+      const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'podfile-test'));
+      const podfilePath = path.join(tmpDir, 'Podfile');
+      fs.writeFileSync(podfilePath, config.podfile || '');
+      config.modRequest = { platformProjectRoot: tmpDir };
+      const result = action(config);
+      const finalConfig = result || config;
+      finalConfig.podfile = fs.readFileSync(podfilePath, 'utf8');
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+      return finalConfig;
     },
     withXcodeProject: (config, cb) => {
       const fake = {
