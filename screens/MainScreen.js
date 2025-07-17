@@ -18,9 +18,8 @@ import {
   TestIds,
 } from 'react-native-google-mobile-ads';
 
-const adUnitId = __DEV__
-  ? TestIds.REWARDED
-  : 'ca-app-pub-5506676208773786/4493407648';
+// Use Google's test AdMob unit ID until the app is ready for production.
+const adUnitId = TestIds.REWARDED;
 
 const rewarded = RewardedAd.createForAdRequest(adUnitId, {
   requestNonPersonalizedAdsOnly: true,

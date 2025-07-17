@@ -33,8 +33,9 @@ export default {
       },
       // 👇 Your custom plugin reads the App IDs from here
       reactNativeGoogleMobileAds: {
-        ios_app_id: 'ca-app-pub-5506676208773786~5792481604',
-        android_app_id: 'ca-app-pub-5506676208773786~4366691423',
+        // Test App IDs from Google. Replace with your real IDs when publishing.
+        ios_app_id: 'ca-app-pub-3940256099942544~1458002511',
+        android_app_id: 'ca-app-pub-3940256099942544~3347511713',
       },
     },
     plugins: [
