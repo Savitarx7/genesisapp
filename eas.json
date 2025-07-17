@@ -23,7 +23,7 @@
       "autoIncrement": true,
       "ios": {
         "simulator": false,
-        "resourceClass": "m1-medium"
+        "resourceClass": "m-medium"
       },
       "env": {
         "NODE_ENV": "production"

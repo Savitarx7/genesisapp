@@ -16,6 +16,9 @@ export default {
       bundleIdentifier: 'com.adrianpavlick8.genesisapp',
       buildNumber: '1',
       supportsTablet: true,
+      infoPlist: {
+        ITSAppUsesNonExemptEncryption: false,
+      },
     },
     android: {
       package: 'com.adrianpavlick8.genesisapp',
