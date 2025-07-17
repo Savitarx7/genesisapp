@@ -1,6 +1,15 @@
 // screens/AuthScreen.js
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
 import { auth } from '../firebaseConfig';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 
@@ -21,7 +30,10 @@ export default function AuthScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={["#000000", "#001a00"]}
+      style={styles.container}
+    >
       <Text style={styles.header}>Genesis Login</Text>
       <TextInput
         style={styles.input}
@@ -40,17 +52,21 @@ export default function AuthScreen() {
         onChangeText={setPassword}
         value={password}
       />
-      <Button title="Login" onPress={handleLogin} color="#00ff00" />
-      <View style={{ marginTop: 10 }} />
-      <Button title="Sign Up" onPress={handleSignup} color="#00ff00" />
-    </View>
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Ionicons name="log-in-outline" size={20} color="#000" />
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={handleSignup}>
+        <Ionicons name="person-add-outline" size={20} color="#000" />
+        <Text style={styles.buttonText}>Sign Up</Text>
+      </TouchableOpacity>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
     justifyContent: 'center',
     padding: 30,
   },
@@ -59,6 +75,7 @@ const styles = StyleSheet.create({
     color: '#00ff00',
     textAlign: 'center',
     marginBottom: 30,
+    fontFamily: 'FiraCode-Bold',
   },
   input: {
     borderWidth: 1,
@@ -67,5 +84,25 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 15,
     borderRadius: 8,
+    fontFamily: 'FiraCode-Regular',
+  },
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#00ff00',
+    paddingVertical: 12,
+    borderRadius: 10,
+    marginTop: 10,
+    shadowColor: '#00ff00',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 6,
+  },
+  buttonText: {
+    marginLeft: 8,
+    color: '#000',
+    fontSize: 16,
+    fontFamily: 'FiraCode-Bold',
   },
 });

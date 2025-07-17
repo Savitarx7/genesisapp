@@ -12,7 +12,7 @@ const Stack = createNativeStackNavigator();
 export default function AppNavigator() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator screenOptions={{ headerShown: false, animation: 'fade' }}>
         <Stack.Screen name="Auth" component={AuthScreen} />
         <Stack.Screen name="Main" component={MainScreen} />
         <Stack.Screen name="Game" component={GameScreen} />

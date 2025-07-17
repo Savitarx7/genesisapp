@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { onAuthStateChanged } from 'firebase/auth';
 import { View, ActivityIndicator } from 'react-native';
+import { useFonts } from 'expo-font';
 
 import AuthScreen from './screens/AuthScreen';
 import MainScreen from './screens/MainScreen';
@@ -13,6 +14,10 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [fontsLoaded] = useFonts({
+    'FiraCode-Regular': require('./assets/fonts/FiraCode-Regular.ttf'),
+    'FiraCode-Bold': require('./assets/fonts/FiraCode-Bold.ttf'),
+  });
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -22,7 +27,7 @@ export default function App() {
     return unsubscribe;
   }, []);
 
-  if (loading) {
+  if (loading || !fontsLoaded) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" color="#00ff00" />
@@ -32,7 +37,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator screenOptions={{ headerShown: false, animation: 'fade' }}>
         {user ? (
           <Stack.Screen name="Main" component={MainScreen} />
         ) : (

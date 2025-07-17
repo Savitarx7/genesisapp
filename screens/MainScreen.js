@@ -9,6 +9,8 @@ import {
   Modal,
   Alert,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
 import { auth, rtdb } from '../firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
 import { ref, get, set, onValue } from 'firebase/database';
@@ -27,6 +29,7 @@ const rewarded = RewardedAd.createForAdRequest(adUnitId, {
 });
 
 const backgroundImage = require('../assets/matrix-background.gif');
+const ACCENT = '#00ffff';
 
 const MainScreen = () => {
   const [user, setUser] = useState(null);
@@ -115,11 +118,15 @@ const MainScreen = () => {
 
   return (
     <ImageBackground source={backgroundImage} style={styles.background}>
-      <View style={styles.container}>
+      <LinearGradient
+        colors={["rgba(0,0,0,0.8)", "#001a00"]}
+        style={styles.container}
+      >
         <Text style={styles.title}>Project Genesis</Text>
         <Text style={styles.subtitle}>Tap to escape the Matrix</Text>
         <TouchableOpacity style={styles.mineButton} onPress={handleMinePress}>
-          <Text style={styles.mineText}>MINE</Text>
+          <Ionicons name="rocket-outline" size={20} color="#000" />
+          <Text style={styles.mineText}>Mine</Text>
         </TouchableOpacity>
         <Text style={styles.counterText}>Auto Counter: {autoCounter}</Text>
         <Text style={styles.counterText}>
@@ -134,7 +141,7 @@ const MainScreen = () => {
             </View>
           </View>
         </Modal>
-      </View>
+      </LinearGradient>
     </ImageBackground>
   );
 };
@@ -152,29 +159,38 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 34,
-    fontWeight: 'bold',
     color: '#00ff00',
     marginBottom: 10,
+    fontFamily: 'FiraCode-Bold',
   },
   subtitle: {
     fontSize: 18,
     color: '#00ff00',
     marginBottom: 20,
+    fontFamily: 'FiraCode-Regular',
   },
   mineButton: {
     backgroundColor: '#00ff00',
     paddingVertical: 15,
     paddingHorizontal: 40,
     borderRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: '#00ff00',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 6,
   },
   mineText: {
     color: '#000',
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily: 'FiraCode-Bold',
+    marginLeft: 8,
   },
   counterText: {
-    color: '#fff',
+    color: ACCENT,
     marginTop: 10,
+    fontFamily: 'FiraCode-Regular',
   },
   popupContainer: {
     flex: 1,
@@ -190,8 +206,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   popupText: {
-    color: '#00ff00',
+    color: ACCENT,
     fontSize: 16,
+    fontFamily: 'FiraCode-Regular',
   },
 });
 
