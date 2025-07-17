@@ -64,7 +64,7 @@ const MatrixRain = () => {
         top: y,
         left: (screenWidth / numCols) * i,
         color: '#00ff66',
-        fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
+        fontFamily: 'FiraCode-Regular',
         fontSize: 14,
       }}
     >
@@ -285,11 +285,11 @@ const styles = StyleSheet.create({
     left: 20,
     fontSize: 24,
     color: '#0F0',
-    fontWeight: 'bold',
+    fontFamily: 'FiraCode-Bold',
   },
   codeContainer: { overflow: 'hidden', backgroundColor: '#002200' },
   codeText: {
     color: '#00FF66',
-    fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
+    fontFamily: 'FiraCode-Regular',
   },
 });
