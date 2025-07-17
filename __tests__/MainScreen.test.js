@@ -2,6 +2,9 @@ import React from 'react';
 import { Alert } from 'react-native';
 import { render, fireEvent, act } from '@testing-library/react-native';
 
+jest.mock('expo-linear-gradient');
+jest.mock('@expo/vector-icons');
+
 jest.mock('react-native-google-mobile-ads', () => {
   const reward = {
     loaded: false,
@@ -38,7 +41,7 @@ describe('MainScreen', () => {
     rewardMock.loaded = true;
     const MainScreen = require('../screens/MainScreen').default;
     const { getByText } = render(<MainScreen />);
-    fireEvent.press(getByText('MINE'));
+    fireEvent.press(getByText('Mine'));
     expect(rewardMock.show).toHaveBeenCalled();
   });
 
@@ -47,7 +50,7 @@ describe('MainScreen', () => {
     const alertSpy = jest.spyOn(Alert, 'alert');
     const MainScreen = require('../screens/MainScreen').default;
     const { getByText } = render(<MainScreen />);
-    fireEvent.press(getByText('MINE'));
+    fireEvent.press(getByText('Mine'));
     expect(rewardMock.load).toHaveBeenCalled();
     expect(alertSpy).toHaveBeenCalledWith('Ad not ready', 'Please try again in a few seconds.');
   });
