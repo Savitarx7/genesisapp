@@ -99,3 +99,10 @@ To learn more about React Native, take a look at the following resources:
 ## Legal
 
 Please review the [Privacy Policy](./PRIVACY_POLICY.md) and [Terms of Use](./TERMS_OF_USE.md) for details on data handling, simulated mining, and advertising.
+
+## EAS Build Setup
+
+To build this project with [EAS Build](https://docs.expo.dev/build/introduction/), use the provided GitHub workflow. The workflow generates an Android keystore automatically using `scripts/generate-android-keystore.sh` and then starts the build with `eas build`.
+
+Ensure the `EAS_ACCESS_TOKEN` secret (and optional keystore secrets) are configured in your repository settings before triggering the workflow.
+
