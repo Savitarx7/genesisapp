@@ -28,7 +28,7 @@
       "env": {
         "NODE_ENV": "production"
       },
-      "node": "18.18.2" // <--- CHANGED to your exact local version
+      "node": "18.18.2"
     }
   },
   "submit": {
