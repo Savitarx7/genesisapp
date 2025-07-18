@@ -39,5 +39,8 @@
   "expo": {
     "config": "app.config.js"
   },
-  "private": true
+  "private": true,
+  "engines": {
+    "node": ">=18.18.0"
+  }
 }
