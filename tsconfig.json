@@ -3,6 +3,8 @@
   "compilerOptions": {
     "strict": true,
     "baseUrl": "./",
+    "types": ["react", "react-test-renderer", "jest"],
+    "moduleResolution": "bundler",
     "paths": {
       "*": ["node_modules/*"]
     }
