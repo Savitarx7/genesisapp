@@ -8,7 +8,8 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest",
-    "generate-keystore": "./scripts/generate-android-keystore.sh"
+    "generate-keystore": "./scripts/generate-android-keystore.sh",
+    "build-local": "./scripts/eas-build-local.sh"
   },
   "dependencies": {
     "@expo/config-plugins": "^7.8.0",
