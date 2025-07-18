@@ -30,6 +30,9 @@
     "@babel/core": "^7.27.4",
     "@react-native/babel-preset": "0.73.21",
     "@testing-library/react-native": "^13.2.0",
+    "@types/jest": "^30.0.0",
+    "@types/react": "^19.1.8",
+    "@types/react-test-renderer": "^19.1.0",
     "jest": "^30.0.4",
     "react-test-renderer": "18.2.0"
   },
