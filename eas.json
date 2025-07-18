@@ -28,7 +28,7 @@
       "env": {
         "NODE_ENV": "production"
       },
-      "node": "18.18.2",
+      "node": "18.18.0",
       "android": {
         "credentialsSource": "local"
       }
