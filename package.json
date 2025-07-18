@@ -31,24 +31,8 @@
     "@react-native/babel-preset": "0.73.21",
     "@testing-library/react-native": "^13.2.0",
     "jest": "^30.0.4",
-    "metro": "0.79.0",
+    "metro": "0.80.0",
     "react-test-renderer": "18.2.0"
-  },
-  "overrides": {
-    "metro": "0.79.0",
-    "metro-config": "0.79.0",
-    "metro-core": "0.79.0",
-    "metro-cache": "0.79.0",
-    "metro-cache-key": "0.79.0",
-    "metro-babel-transformer": "0.79.0",
-    "metro-file-map": "0.79.0",
-    "metro-minify-terser": "0.79.0",
-    "metro-resolver": "0.79.0",
-    "metro-runtime": "0.79.0",
-    "metro-source-map": "0.79.0",
-    "metro-symbolicate": "0.79.0",
-    "metro-transform-plugins": "0.79.0",
-    "metro-transform-worker": "0.79.0"
   },
   "expo": {
     "config": "app.config.js"
