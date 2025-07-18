@@ -31,6 +31,7 @@
     "@react-native/babel-preset": "0.73.21",
     "@testing-library/react-native": "^13.2.0",
     "jest": "^30.0.4",
+    "metro": "^0.82.3",
     "react-test-renderer": "18.2.0"
   },
   "expo": {
