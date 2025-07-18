@@ -1,6 +1,4 @@
 const { getDefaultConfig } = require('@expo/metro-config');
 
-// Use the default Metro configuration for Expo SDK 53
-const config = getDefaultConfig(__dirname);
-
-module.exports = config;
+// Use the default Expo Metro configuration
+module.exports = getDefaultConfig(__dirname);
