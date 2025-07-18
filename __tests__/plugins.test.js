@@ -18,9 +18,9 @@ jest.mock('@expo/config-plugins', () => {
     },
     AndroidConfig: {
       Manifest: {
-        getApplication: () => android.manifest.application[0],
-        add: (app, _name, items) => {
-          app.meta = items;
+        getMainApplicationOrThrow: () => android.manifest.application[0],
+        addMetaDataItemToMainApplication: (app, _name, value) => {
+          app['meta-data'] = [{ $: { 'android:name': _name, 'android:value': value } }];
         },
       },
     },
@@ -64,7 +64,7 @@ describe('custom plugins', () => {
     const config = { extra: { reactNativeGoogleMobileAds: { ios_app_id: 'ios', android_app_id: 'android' } } };
     const result = withAdMobAppId(config);
     expect(result.ios.GADApplicationIdentifier).toBe('ios');
-    expect(result.android.manifest.application[0].meta[0]['android:value']).toBe('android');
+    expect(result.android.manifest.application[0]['meta-data'][0].$['android:value']).toBe('android');
   });
 
   it('patches Podfile contents', () => {
