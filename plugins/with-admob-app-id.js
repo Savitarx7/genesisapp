@@ -19,24 +19,17 @@ const withAdMobAndroid = (config) => {
   return withAndroidManifest(config, (cfg) => {
     const adMobAppId = config.extra?.reactNativeGoogleMobileAds?.android_app_id;
     if (adMobAppId) {
-      // Ensure the <application> tag exists
-      const application = AndroidConfig.Manifest.getApplication(cfg.modResults);
-      if (application) {
-        AndroidConfig.Manifest.add               
-          (application,             
-            'meta-data',
-          [  
-            {
-              'android:name': 'com.google.android.gms.ads.APPLICATION_ID',
-              'android:value': adMobAppId,
-            },
-          ]
+      try {
+        const mainApplication = AndroidConfig.Manifest.getMainApplicationOrThrow(cfg.modResults);
+        AndroidConfig.Manifest.addMetaDataItemToMainApplication(mainApplication,
+          'com.google.android.gms.ads.APPLICATION_ID',
+          adMobAppId,
         );
-      } else {
-        console.warn("Android <application> tag not found in manifest.");
+      } catch (error) {
+        console.warn('Failed to add AdMob App ID to AndroidManifest:', error.message);
       }
     } else {
-      console.warn("AdMob Android App ID not found in config.extra.reactNativeGoogleMobileAds.android_app_id");
+      console.warn('AdMob Android App ID not found in config.extra.reactNativeGoogleMobileAds.android_app_id');
     }
     return cfg;
   });
