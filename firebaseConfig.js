@@ -23,14 +23,13 @@ const firebaseConfig = {
     'https://genesis-3f594-default-rtdb.firebaseio.com/'
 };
 
+let app;
 if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
+  app = firebase.initializeApp(firebaseConfig);
+} else {
+  app = firebase.app();
 }
-
-const app = firebase.app();
-
 const authInstance = auth();
 const db = firestore();
 const rtdb = database();
-
 export { app, authInstance as auth, db, rtdb };
