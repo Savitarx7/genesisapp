@@ -106,5 +106,7 @@ To build this project with [EAS Build](https://docs.expo.dev/build/introduction/
 
 Ensure the `EAS_ACCESS_TOKEN` secret (and optional keystore secrets) are configured in your repository settings before triggering the workflow.
 
-For local builds run `./scripts/eas-build-local.sh`. This script checks that you are logged in (or have `EXPO_TOKEN` set) before invoking `eas build`. It also requires network access to `https://api.expo.dev`.
+For local builds run `./scripts/eas-build-local.sh`. This script checks that you are logged in (or have `EXPO_TOKEN` set) before invoking `eas build`.
+
+EAS CLI communicates with the Expo API at `https://api.expo.dev` even when building locally. It contacts this endpoint to verify your credentials, fetch project settings, and register the build with Expo's services. If this host is blocked, the build fails with a network error, so the helper script checks connectivity first and surfaces a clear message.
 
