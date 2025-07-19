@@ -108,3 +108,11 @@ Ensure the `EAS_ACCESS_TOKEN` secret (and optional keystore secrets) are configu
 
 If building locally, run `eas login` or set `EXPO_TOKEN` to authenticate before running `eas build`.
 
+
+## Running Tests
+
+```sh
+npm test
+```
+
+**Note:** Run `npm install` before executing the tests so that Jest is available. This is required when setting up the project from a fresh clone or in a CI environment.
