@@ -12,8 +12,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { auth, rtdb } from '../firebaseConfig';
-import { onAuthStateChanged } from 'firebase/auth';
-import { ref, get, set, onValue } from 'firebase/database';
+import { ref, get, set, onValue } from '@react-native-firebase/database';
 import {
   RewardedAd,
   RewardedAdEventType,
@@ -38,7 +37,7 @@ const MainScreen = () => {
   const [totalTokens, setTotalTokens] = useState(0);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
       setUser(currentUser);
       if (currentUser) {
         const userRef = ref(rtdb, `mining_sessions/${currentUser.uid}`);
