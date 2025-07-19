@@ -1,5 +1,5 @@
 import { rtdb, auth } from "../firebaseConfig";
-import { ref, get, set, update } from "firebase/database";
+import { ref, get, set, update } from "@react-native-firebase/database";
 
 // Constants
 const BASE_RATE = 0.01; // Initial mining rate per hour
