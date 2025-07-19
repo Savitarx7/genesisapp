@@ -11,20 +11,22 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { auth } from '../firebaseConfig';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+
 
 export default function AuthScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSignup = () => {
-    createUserWithEmailAndPassword(auth, email, password)
+    auth
+      .createUserWithEmailAndPassword(email, password)
       .then(() => Alert.alert('Signed up!'))
       .catch((error) => Alert.alert('Signup Error', error.message));
   };
 
   const handleLogin = () => {
-    signInWithEmailAndPassword(auth, email, password)
+    auth
+      .signInWithEmailAndPassword(email, password)
       .then(() => Alert.alert('Logged in!'))
       .catch((error) => Alert.alert('Login Error', error.message));
   };
