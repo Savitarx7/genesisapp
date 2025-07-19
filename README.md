@@ -108,3 +108,5 @@ Ensure the `EAS_ACCESS_TOKEN` secret (and optional keystore secrets) are configu
 
 If building locally, run `eas login` or set `EXPO_TOKEN` to authenticate before running `eas build`.
 
+Run `npm run build-local` to perform the local build via the helper script, which checks network connectivity before starting.
+
