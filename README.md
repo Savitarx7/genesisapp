@@ -86,6 +86,21 @@ You've successfully run and modified your React Native App. :partying_face:
 
 If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
 
+# Running Tests
+
+Install dependencies once and then run:
+
+```sh
+npm test
+```
+
+Lint the project with:
+
+```sh
+npm run lint
+```
+
+# Learn More
 # Learn More
 
 To learn more about React Native, take a look at the following resources:
@@ -107,4 +122,20 @@ To build this project with [EAS Build](https://docs.expo.dev/build/introduction/
 Ensure the `EAS_ACCESS_TOKEN` secret (and optional keystore secrets) are configured in your repository settings before triggering the workflow.
 
 If building locally, run `eas login` or set `EXPO_TOKEN` to authenticate before running `eas build`.
+
+### Firebase Environment Variables
+
+The app reads Firebase credentials from environment variables so they work with EAS builds. Define the following variables with your Firebase project values:
+
+| Variable | Description |
+| --- | --- |
+| `EXPO_PUBLIC_FIREBASE_API_KEY` | Web API key |
+| `EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN` | Auth domain |
+| `EXPO_PUBLIC_FIREBASE_PROJECT_ID` | Project ID |
+| `EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET` | Storage bucket |
+| `EXPO_PUBLIC_FIREBASE_APP_ID` | App ID |
+| `EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID` | Measurement ID (optional) |
+| `EXPO_PUBLIC_FIREBASE_DATABASE_URL` | Realtime DB URL |
+
+These are referenced in `firebaseConfig.js` and can be placed in `.env` files or configured in your CI environment.
 

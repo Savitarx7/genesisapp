@@ -1,8 +1,8 @@
-// firebaseConfig.js (✅ Web SDK version - correct for Expo/EAS)
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-import { getDatabase } from 'firebase/database';
+// firebaseConfig.js (Expo SDK 53 + EAS) using React Native Firebase
+import firebase from '@react-native-firebase/app';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import database from '@react-native-firebase/database';
 
 // Firebase credentials should not be hard-coded for production use. Environment
 // variables prefixed with EXPO_PUBLIC_ allow access in EAS and during local
@@ -23,9 +23,14 @@ const firebaseConfig = {
     'https://genesis-3f594-default-rtdb.firebaseio.com/'
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const rtdb = getDatabase(app);
+let app;
+if (!firebase.apps.length) {
+  app = firebase.initializeApp(firebaseConfig);
+} else {
+  app = firebase.app();
+}
 
-export { app, auth, db, rtdb };
+const authInstance = auth();
+const db = firestore();
+const rtdb = database();
+export { app, authInstance as auth, db, rtdb };
