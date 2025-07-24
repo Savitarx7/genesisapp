@@ -20,17 +20,7 @@ yarn start
 
 ## Step 2: Build and run your app
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
-```
+With Metro running, open a new terminal window/pane from the root of your React Native project, and run the following command to build and run your iOS app:
 
 ### iOS
 
@@ -58,9 +48,9 @@ npm run ios
 yarn ios
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+If everything is set up correctly, you should see your new app running in the iOS Simulator or your connected device.
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+This is one way to run your app — you can also build it directly from Xcode.
 
 ## Step 3: Modify your app
 
@@ -70,7 +60,6 @@ Open `App.tsx` in your text editor of choice and make some changes. When you sav
 
 When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
 - **iOS**: Press <kbd>R</kbd> in iOS Simulator.
 
 ## Congratulations! :tada:
@@ -102,9 +91,9 @@ Please review the [Privacy Policy](./PRIVACY_POLICY.md) and [Terms of Use](./TER
 
 ## EAS Build Setup
 
-To build this project with [EAS Build](https://docs.expo.dev/build/introduction/), use the provided GitHub workflow. The workflow generates an Android keystore automatically using `scripts/generate-android-keystore.sh` and then starts the build with `eas build`.
+To build this project with [EAS Build](https://docs.expo.dev/build/introduction/), use the provided GitHub workflow. The workflow starts an iOS build with `eas build`.
 
-Ensure the `EAS_ACCESS_TOKEN` secret (and optional keystore secrets) are configured in your repository settings before triggering the workflow.
+Ensure the `EAS_ACCESS_TOKEN` secret is configured in your repository settings before triggering the workflow. You can run `scripts/add-eas-token.sh` to automatically create and upload the token.
 
 If building locally, run `eas login` or set `EXPO_TOKEN` to authenticate before running `eas build`.
 
