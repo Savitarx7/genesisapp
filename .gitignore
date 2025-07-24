@@ -22,6 +22,12 @@ DerivedData
 *.xcuserstate
 **/.xcode.env.local
 
+# Android/IntelliJ
+#
+build/
+.idea
+.gradle
+local.properties
 *.iml
 *.hprof
 .cxx/
@@ -70,3 +76,4 @@ yarn-error.log
 
 # Expo development directory
 .expo/
+android/

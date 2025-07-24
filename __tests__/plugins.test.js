@@ -4,11 +4,25 @@ import removeGoogleMobileAdsBuildPhase from '../plugins/with-remove-admob-build-
 
 jest.mock('@expo/config-plugins', () => {
   const ios = {};
+  const android = { manifest: { application: [{}] } };
   return {
     withInfoPlist: (config, cb) => {
       cb({ modResults: ios });
       config.ios = ios;
       return config;
+    },
+    withAndroidManifest: (config, cb) => {
+      cb({ modResults: android });
+      config.android = android;
+      return config;
+    },
+    AndroidConfig: {
+      Manifest: {
+        getMainApplicationOrThrow: () => android.manifest.application[0],
+        addMetaDataItemToMainApplication: (app, _name, value) => {
+          app['meta-data'] = [{ $: { 'android:name': _name, 'android:value': value } }];
+        },
+      },
     },
     withDangerousMod: (config, [platform, action]) => {
       const fs = require('fs');
@@ -46,10 +60,11 @@ jest.mock('@expo/config-plugins', () => {
 });
 
 describe('custom plugins', () => {
-  it('sets AdMob ID in plist', () => {
-    const config = { extra: { reactNativeGoogleMobileAds: { ios_app_id: 'ios' } } };
+  it('sets AdMob IDs in plist and manifest', () => {
+    const config = { extra: { reactNativeGoogleMobileAds: { ios_app_id: 'ios', android_app_id: 'android' } } };
     const result = withAdMobAppId(config);
     expect(result.ios.GADApplicationIdentifier).toBe('ios');
+    expect(result.android.manifest.application[0]['meta-data'][0].$['android:value']).toBe('android');
   });
 
   it('patches Podfile contents', () => {
