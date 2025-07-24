@@ -20,13 +20,6 @@ export default {
         ITSAppUsesNonExemptEncryption: false,
       },
     },
-    android: {
-      package: 'com.adrianpavlick8.genesisapp',
-      adaptiveIcon: {
-        foregroundImage: './assets/icon.png',
-        backgroundColor: '#000000',
-      },
-    },
     web: {
       bundler: 'metro',
     },
@@ -37,8 +30,7 @@ export default {
       // 👇 Your custom plugin reads the App IDs from here
       reactNativeGoogleMobileAds: {
         // Test App IDs from Google. Replace with your real IDs when publishing.
-        ios_app_id: 'ca-app-pub-3940256099942544~1458002511',
-        android_app_id: 'ca-app-pub-3940256099942544~3347511713',
+        ios_app_id: 'ca-app-pub-3940256099942544~1458002511'
       },
     },
     plugins: [
