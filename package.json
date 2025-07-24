@@ -3,10 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "expo start",
-    "ios": "expo run:ios",
-    "web": "expo start --web",
     "test": "jest",
+    "generate-keystore": "./scripts/generate-android-keystore.sh",
     "postinstall": "node ./scripts/postinstall.js"
   },
   "dependencies": {
