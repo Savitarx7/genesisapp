@@ -56,7 +56,6 @@ export default {
           },
         },
       ],
-      './plugins/with-custom-podfile.js',
     ],
   },
 };
