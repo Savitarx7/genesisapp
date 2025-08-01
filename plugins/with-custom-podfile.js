@@ -9,10 +9,17 @@ const withCustomPodfile = (config) => {
       const podfilePath = path.join(cfg.modRequest.platformProjectRoot, 'Podfile');
       let contents = fs.readFileSync(podfilePath, 'utf8');
 
-      if (!contents.includes('use_frameworks!')) {
+      if (!/use_frameworks!/.test(contents)) {
         contents = contents.replace(
           /use_expo_modules!\(\)/,
           `use_expo_modules!()\n  use_frameworks! :linkage => :static`
+        );
+      }
+
+      if (!contents.includes('use_modular_headers!')) {
+        contents = contents.replace(
+          /use_frameworks!.*\n/,
+          (match) => `${match}  use_modular_headers!\n`
         );
       }
 

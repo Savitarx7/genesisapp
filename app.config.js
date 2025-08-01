@@ -52,6 +52,7 @@ export default {
         {
           ios: {
             useFrameworks: 'static',
+            useModularHeaders: true,
           },
         },
       ],
