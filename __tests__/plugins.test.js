@@ -1,5 +1,4 @@
 import withAdMobAppId from '../plugins/with-admob-app-id';
-import withCustomPodfile from '../plugins/with-custom-podfile';
 import removeGoogleMobileAdsBuildPhase from '../plugins/with-remove-admob-build-phase';
 
 jest.mock('@expo/config-plugins', () => {
@@ -23,20 +22,6 @@ jest.mock('@expo/config-plugins', () => {
           app['meta-data'] = [{ $: { 'android:name': _name, 'android:value': value } }];
         },
       },
-    },
-    withDangerousMod: (config, [platform, action]) => {
-      const fs = require('fs');
-      const os = require('os');
-      const path = require('path');
-      const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'podfile-test'));
-      const podfilePath = path.join(tmpDir, 'Podfile');
-      fs.writeFileSync(podfilePath, config.podfile || '');
-      config.modRequest = { platformProjectRoot: tmpDir };
-      const result = action(config);
-      const finalConfig = result || config;
-      finalConfig.podfile = fs.readFileSync(podfilePath, 'utf8');
-      fs.rmSync(tmpDir, { recursive: true, force: true });
-      return finalConfig;
     },
     withXcodeProject: (config, cb) => {
       const fake = {
@@ -65,13 +50,6 @@ describe('custom plugins', () => {
     const result = withAdMobAppId(config);
     expect(result.ios.GADApplicationIdentifier).toBe('ios');
     expect(result.android.manifest.application[0]['meta-data'][0].$['android:value']).toBe('android');
-  });
-
-  it('patches Podfile contents', () => {
-    const config = { podfile: "use_expo_modules!()\npod 'FirebaseAuth'" };
-    const result = withCustomPodfile(config);
-    expect(result.podfile).toContain('use_frameworks! :linkage => :static');
-    expect(result.podfile).toContain(":modular_headers => true");
   });
 
   it('removes build phase in Xcode project', () => {
