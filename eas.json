@@ -9,12 +9,18 @@
       "distribution": "internal",
       "ios": {
         "simulator": true
+      },
+      "hooks": {
+        "pre-build": "node ./scripts/patchPodfile.js"
       }
     },
     "preview": {
       "distribution": "internal",
       "ios": {
         "simulator": false
+      },
+      "hooks": {
+        "pre-build": "node ./scripts/patchPodfile.js"
       }
     },
     "production": {
@@ -31,6 +37,9 @@
       "node": "18.18.2",
       "android": {
         "credentialsSource": "local"
+      },
+      "hooks": {
+        "pre-build": "node ./scripts/patchPodfile.js"
       }
     }
   },
