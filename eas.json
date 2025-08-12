@@ -1,53 +1,29 @@
 {
-  "cli": {
-    "version": ">= 3.0.0",
-    "appVersionSource": "remote"
-  },
+  "cli": { "version": ">= 3.0.0", "appVersionSource": "remote" },
   "build": {
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "ios": {
-        "simulator": true
-      },
-      "hooks": {
-        "pre-build": "node ./scripts/patchPodfile.js"
-      }
+      "ios": { "simulator": true }
     },
     "preview": {
       "distribution": "internal",
-      "ios": {
-        "simulator": false
-      },
-      "hooks": {
-        "pre-build": "node ./scripts/patchPodfile.js"
-      }
+      "ios": { "simulator": false }
     },
     "production": {
       "developmentClient": false,
       "distribution": "store",
       "autoIncrement": true,
-      "ios": {
-        "simulator": false,
-        "resourceClass": "m-medium"
-      },
-      "env": {
-        "NODE_ENV": "production"
-      },
+      "ios": { "simulator": false, "resourceClass": "m-medium" },
+      "env": { "NODE_ENV": "production" },
       "node": "18.18.2",
-      "android": {
-        "credentialsSource": "local"
-      },
-      "hooks": {
-        "pre-build": "node ./scripts/patchPodfile.js"
-      }
+      "android": { "credentialsSource": "local" }
     }
   },
+  "hooks": {
+    "pre-build": "node ./scripts/patchPodfile.js"
+  },
   "submit": {
-    "production": {
-      "ios": {
-        "ascAppId": "6745538429"
-      }
-    }
+    "production": {}
   }
 }
