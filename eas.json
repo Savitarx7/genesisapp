@@ -20,10 +20,5 @@
       "android": { "credentialsSource": "local" }
     }
   },
-  "hooks": {
-    "pre-build": "node ./scripts/patchPodfile.js"
-  },
-  "submit": {
-    "production": {}
-  }
+  "submit": { "production": {} }
 }
