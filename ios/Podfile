@@ -13,5 +13,7 @@ target 'GenesisApp' do
 
   post_install do |installer|
     react_native_post_install(installer)
+    # Strip unsupported '-G' flags from generated pod configs
+    system('node', File.join(__dir__, '..', 'scripts', 'patchFlags.js'))
   end
 end

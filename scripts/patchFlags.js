@@ -1,7 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 
-const roots = ['ios', 'ios/Pods'];
+// Work from the repository root regardless of the current working directory
+const rootDir = path.join(__dirname, '..');
+const roots = [
+  path.join(rootDir, 'ios'),
+  path.join(rootDir, 'ios', 'Pods'),
+];
 const targets = [];
 function collect(p) {
   if (!fs.existsSync(p)) return;
