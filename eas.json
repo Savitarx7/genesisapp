@@ -20,5 +20,9 @@
       "android": { "credentialsSource": "local" }
     }
   },
-  "submit": { "production": {} }
+  "submit": {
+    "production": {
+      "ios": { "ascAppId": "6745538429" }
+    }
+  }
 }
