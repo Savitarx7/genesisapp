@@ -43,7 +43,7 @@
     "metro": "^0.82.0",
     "metro-config": "^0.82.0",
     "metro-resolver": "^0.82.0",
-    "react-test-renderer": "18.2.0"
+    "react-test-renderer": "19.0.0"
   },
   "expo": {
     "config": "app.config.js"
