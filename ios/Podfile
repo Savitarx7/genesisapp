@@ -13,33 +13,5 @@ target 'GenesisApp' do
 
   post_install do |installer|
     react_native_post_install(installer)
-
-    targets = installer.pods_project.targets + installer.aggregate_targets.flat_map { |t| t.user_project.native_targets }
-
-    targets.each do |target|
-      target.build_configurations.each do |config|
-        %w[OTHER_CFLAGS OTHER_CPLUSPLUSFLAGS OTHER_LDFLAGS].each do |flag|
-          value = config.build_settings[flag]
-          next if value.nil?
-
-          cleaned = false
-          if value.is_a?(Array)
-            new_val = value.reject { |f| f == '-G' }
-            cleaned = new_val.length != value.length
-            config.build_settings[flag] = new_val
-          elsif value.is_a?(String)
-            new_val = value.gsub(/(\s)-G(\s|$)/, '\1\2').squeeze(' ').strip
-            cleaned = new_val != value
-            config.build_settings[flag] = new_val
-          end
-
-          puts "Removed -G from #{target.name} #{config.name} #{flag}" if cleaned
-        end
-      end
-    end
-
-    system('node', File.join(__dir__, '..', 'scripts', 'stripDashG.js'))
-    # Also run the more exhaustive flag patcher to catch any new entries.
-    system('node', File.join(__dir__, '..', 'scripts', 'patchFlags.js'))
   end
 end
