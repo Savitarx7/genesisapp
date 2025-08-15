@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
-ruby '>= 2.7'
-gem 'cocoapods', '>= 1.16.2'
+ruby ">= 2.6.10"
 
+gem 'cocoapods', '>= 1.16.2'
