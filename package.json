@@ -9,7 +9,7 @@
     "web": "expo start --web",
     "test": "jest",
     "generate-keystore": "./scripts/generate-android-keystore.sh",
-    "postinstall": "node ./scripts/postinstall.js && node ./scripts/patchPodfile.js && node ./scripts/patchFlags.js"
+    "postinstall": "node ./scripts/postinstall.js && node ./scripts/patchPodfile.js && node ./scripts/patchFlags.js && node ./scripts/stripDashG.js"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "2.1.2",

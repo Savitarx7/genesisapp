@@ -22,13 +22,22 @@ target 'GenesisApp' do
           value = config.build_settings[flag]
           next if value.nil?
 
+          cleaned = false
           if value.is_a?(Array)
-            config.build_settings[flag] = value.reject { |f| f == '-G' }
+            new_val = value.reject { |f| f == '-G' }
+            cleaned = new_val.length != value.length
+            config.build_settings[flag] = new_val
           elsif value.is_a?(String)
-            config.build_settings[flag] = value.gsub(/\b-G\b/, '').squeeze(' ').strip
+            new_val = value.gsub(/(\s)-G(\s|$)/, '\1\2').squeeze(' ').strip
+            cleaned = new_val != value
+            config.build_settings[flag] = new_val
           end
+
+          puts "Removed -G from #{target.name} #{config.name} #{flag}" if cleaned
         end
       end
     end
+
+    system('node', File.join(__dir__, '..', 'scripts', 'stripDashG.js'))
   end
 end
