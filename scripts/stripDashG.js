@@ -30,7 +30,9 @@ if (fs.existsSync(pbxproj)) {
 let edited = 0;
 for (const file of files) {
   const content = fs.readFileSync(file, 'utf8');
-  const updated = content.replace(/\s-G(\s|$)/g, ' $1');
+  let updated = content.replace(/(^|[\s,])-G(?=($|[\s,]))/gm, '$1$2');
+  // Tidy up any leftover spacing or commas
+  updated = updated.replace(/,\s*,/g, ',').replace(/\s{2,}/g, ' ');
   if (updated !== content) {
     fs.writeFileSync(file, updated);
     console.log('Patched', file);
