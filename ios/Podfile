@@ -14,32 +14,54 @@ target 'GenesisApp' do
   post_install do |installer|
     react_native_post_install(installer)
 
-    # 1) Remove '-G' from project build settings (arrays/strings)
-    (installer.pods_project.targets + installer.aggregate_targets.flat_map { |t| t.user_project.native_targets }).each do |t|
+    # helper: split strings into tokens, drop standalone -G, return same type
+    def sanitize_field(val)
+      return val unless val
+      if val.is_a?(Array)
+        val.reject { |t| t == '-G' }
+      elsif val.is_a?(String)
+        tokens = val.split(/\s+/).reject { |t| t == '-G' }
+        tokens.join(' ')
+      else
+        val
+      end
+    end
+
+    # 1) TARGETED: clean BoringSSL-GRPC flags and print before/after
+    boring = installer.pods_project.targets.find { |t| t.name == 'BoringSSL-GRPC' }
+    if boring
+      boring.build_configurations.each do |cfg|
+        %w[OTHER_CFLAGS OTHER_CPLUSPLUSFLAGS OTHER_LDFLAGS].each do |k|
+          before = cfg.build_settings[k]
+          after  = sanitize_field(before)
+          cfg.build_settings[k] = after
+          puts "BoringSSL-GRPC #{cfg.name} #{k}: #{before.inspect} -> #{after.inspect}"
+        end
+      end
+    else
+      puts "BoringSSL-GRPC target not found during post_install"
+    end
+
+    # 2) GLOBAL: sanitize all Pods + app targets
+    (installer.pods_project.targets +
+     installer.aggregate_targets.flat_map { |t| t.user_project.native_targets }).each do |t|
       t.build_configurations.each do |cfg|
-        %w[OTHER_CFLAGS OTHER_CPLUSPLUSFLAGS OTHER_LDFLAGS].each do |key|
-          val = cfg.build_settings[key]
-          next if val.nil?
-          if val.is_a?(Array)
-            cfg.build_settings[key] = val.reject { |f| f == '-G' }
-          elsif val.is_a?(String)
-            cfg.build_settings[key] = val.gsub(/\b-G\b/, ' ').squeeze(' ').strip
-          end
+        %w[OTHER_CFLAGS OTHER_CPLUSPLUSFLAGS OTHER_LDFLAGS].each do |k|
+          cfg.build_settings[k] = sanitize_field(cfg.build_settings[k])
         end
       end
     end
 
-    # 2) Also scrub '-G' in generated xcconfig files under Pods/Target Support Files
-    pods_root = installer.sandbox.root # .../ios/Pods
+    # 3) SCRUB xcconfig files in Target Support Files (String form)
+    pods_root = installer.sandbox.root
     Dir.glob(File.join(pods_root, 'Target Support Files', '**', '*.xcconfig')).each do |f|
       txt = File.read(f)
       cleaned = txt.gsub(/\b-G\b/, ' ')
                    .gsub(/\s{2,}/, ' ')
-                   .gsub(/,\s*,/, ',')
                    .gsub(/=\s*,/, '= ')
       if cleaned != txt
         File.write(f, cleaned)
-        puts "🔧 scrubbed -G in #{File.basename(f)}"
+        puts "scrubbed -G in #{File.basename(f)}"
       end
     end
   end
