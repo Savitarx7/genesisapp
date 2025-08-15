@@ -39,5 +39,7 @@ target 'GenesisApp' do
     end
 
     system('node', File.join(__dir__, '..', 'scripts', 'stripDashG.js'))
+    # Also run the more exhaustive flag patcher to catch any new entries.
+    system('node', File.join(__dir__, '..', 'scripts', 'patchFlags.js'))
   end
 end
