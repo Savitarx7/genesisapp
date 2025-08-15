@@ -11,38 +11,24 @@ target 'GenesisApp' do
     hermes_enabled: true
   )
 
-  # Helper used by both hooks
-  def sanitize_field(val)
-    return val if val.nil?
-    if val.is_a?(Array)
-      val.reject { |t| t == '-G' }
-    elsif val.is_a?(String)
-      # remove a standalone -G token, keep lowercase -g if present
-      val.split(/\s+/).reject { |t| t == '-G' }.join(' ')
-    else
-      val
-    end
-  end
-
-  # Strip -G BEFORE Pods project is written (handles pods that inject it)
-  pre_install do |installer|
-    # nothing to iterate yet; just define post_writer hook
-    Pod::Installer::PostInstallHooks::Composite.new
-  end
-
   post_install do |installer|
     react_native_post_install(installer)
 
-    # Sanitize EVERY target (Pods + user) and EVERY configuration
-    targets = installer.pods_project.targets +
-              installer.aggregate_targets.flat_map { |t| t.user_project.native_targets }
-
-    targets.each do |t|
+    # Remove '-G' from all build settings
+    installer.pods_project.targets.each do |t|
       t.build_configurations.each do |cfg|
-        %w[OTHER_CFLAGS OTHER_CPLUSPLUSFLAGS OTHER_LDFLAGS].each do |k|
-          cfg.build_settings[k] = sanitize_field(cfg.build_settings[k])
+        %w[OTHER_CFLAGS OTHER_CPLUSPLUSFLAGS OTHER_LDFLAGS].each do |key|
+          val = cfg.build_settings[key]
+          next if val.nil?
+          cfg.build_settings[key] = val.is_a?(Array) ? val.reject { |tok| tok == '-G' } : val.split(/\s+/).reject { |tok| tok == '-G' }.join(' ')
         end
       end
     end
+
+    # Remove '-G' from all .xcconfig files
+    Dir.glob(File.join(installer.sandbox.root, 'Target Support Files', '**', '*.xcconfig')).each do |file|
+      File.write(file, File.read(file).gsub(/(^|\s)-G(\s|$)/, ' '))
+    end
   end
 end
+
