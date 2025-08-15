@@ -20,13 +20,15 @@ target 'GenesisApp' do
         %w[OTHER_CFLAGS OTHER_CPLUSPLUSFLAGS OTHER_LDFLAGS].each do |key|
           val = cfg.build_settings[key]
           next if val.nil?
-          cfg.build_settings[key] = val.is_a?(Array) ? val.reject { |tok| tok == '-G' } : val.split(/\s+/).reject { |tok| tok == '-G' }.join(' ')
+          cfg.build_settings[key] = val.is_a?(Array) ? \
+            val.reject { |tok| tok == '-G' } : \
+            val.split(/\s+/).reject { |tok| tok == '-G' }.join(' ')
         end
       end
     end
 
-    # Remove '-G' from all .xcconfig files
-    Dir.glob(File.join(installer.sandbox.root, 'Target Support Files', '**', '*.xcconfig')).each do |file|
+    # Remove '-G' from every possible config file
+    Dir.glob(File.join(installer.sandbox_root, '**', '*.{xcconfig,pbxproj}')).each do |file|
       File.write(file, File.read(file).gsub(/(^|\s)-G(\s|$)/, ' '))
     end
   end
