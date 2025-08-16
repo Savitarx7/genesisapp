@@ -14,22 +14,42 @@ target 'GenesisApp' do
   post_install do |installer|
     react_native_post_install(installer)
 
-    # Remove '-G' from all build settings
+    keys = %w[OTHER_CFLAGS OTHER_CPLUSPLUSFLAGS OTHER_LDFLAGS OTHER_SWIFT_FLAGS]
+
+    # Remove '-G' from all pod targets
     installer.pods_project.targets.each do |t|
       t.build_configurations.each do |cfg|
-        %w[OTHER_CFLAGS OTHER_CPLUSPLUSFLAGS OTHER_LDFLAGS].each do |key|
+        keys.each do |key|
           val = cfg.build_settings[key]
           next if val.nil?
-          cfg.build_settings[key] = val.is_a?(Array) ? \
-            val.reject { |tok| tok == '-G' } : \
+          cfg.build_settings[key] = val.is_a?(Array) ?
+            val.reject { |tok| tok == '-G' } :
             val.split(/\s+/).reject { |tok| tok == '-G' }.join(' ')
         end
       end
     end
 
-    # Remove '-G' from every possible config file
-    Dir.glob(File.join(installer.sandbox_root, '**', '*.{xcconfig,pbxproj}')).each do |file|
-      File.write(file, File.read(file).gsub(/(^|\s)-G(\s|$)/, ' '))
+    # Remove '-G' from user project targets
+    installer.aggregate_targets.map(&:user_project).uniq.each do |proj|
+      proj.build_configurations.each do |cfg|
+        keys.each do |key|
+          val = cfg.build_settings[key]
+          next if val.nil?
+          cfg.build_settings[key] = val.is_a?(Array) ?
+            val.reject { |tok| tok == '-G' } :
+            val.split(/\s+/).reject { |tok| tok == '-G' }.join(' ')
+        end
+      end
+      proj.save
+    end
+
+    # Remove '-G' from every possible config file in Pods and user project
+    project_dirs = [installer.sandbox_root]
+    project_dirs += installer.aggregate_targets.map { |t| File.dirname(t.user_project.path) }
+    project_dirs.uniq.each do |dir|
+      Dir.glob(File.join(dir, '**', '*.{xcconfig,pbxproj}')).each do |file|
+        File.write(file, File.read(file).gsub(/(^|\s)-G(\s|$)/, ' '))
+      end
     end
   end
 end
