@@ -16,15 +16,23 @@ target 'GenesisApp' do
 
     keys = %w[OTHER_CFLAGS OTHER_CPLUSPLUSFLAGS OTHER_LDFLAGS OTHER_SWIFT_FLAGS]
 
-    # Remove '-G' from all pod targets
+    # Remove unsupported compiler flags from pod targets
     installer.pods_project.targets.each do |t|
       t.build_configurations.each do |cfg|
         keys.each do |key|
           val = cfg.build_settings[key]
           next if val.nil?
-          cfg.build_settings[key] = val.is_a?(Array) ?
-            val.reject { |tok| tok == '-G' } :
-            val.split(/\s+/).reject { |tok| tok == '-G' }.join(' ')
+
+          tokens = val.is_a?(Array) ? val : val.split(/\s+/)
+          tokens.reject! { |tok| tok == '-G' }
+          if t.name == 'BoringSSL-GRPC'
+            tokens.reject! { |tok| tok == '-GCC_WARN_INHIBIT_ALL_WARNINGS' }
+          end
+          cfg.build_settings[key] = val.is_a?(Array) ? tokens : tokens.join(' ')
+        end
+
+        if t.name == 'BoringSSL-GRPC'
+          cfg.build_settings.delete('GCC_WARN_INHIBIT_ALL_WARNINGS')
         end
       end
     end
@@ -43,12 +51,15 @@ target 'GenesisApp' do
       proj.save
     end
 
-    # Remove '-G' from every possible config file in Pods and user project
+    # Remove '-G' and '-GCC_WARN_INHIBIT_ALL_WARNINGS' from every possible config file in Pods and user project
     project_dirs = [installer.sandbox_root]
     project_dirs += installer.aggregate_targets.map { |t| File.dirname(t.user_project.path) }
     project_dirs.uniq.each do |dir|
       Dir.glob(File.join(dir, '**', '*.{xcconfig,pbxproj}')).each do |file|
-        File.write(file, File.read(file).gsub(/(^|\s)-G(\s|$)/, ' '))
+        File.write(
+          file,
+          File.read(file).gsub(/(^|\s)-(G|GCC_WARN_INHIBIT_ALL_WARNINGS)(\s|$)/, ' ')
+        )
       end
     end
   end
