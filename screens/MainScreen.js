@@ -11,8 +11,9 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { auth, rtdb } from '../firebaseConfig';
+import { auth, database } from '../firebaseConfig';
 import { ref, get, set, onValue } from '@react-native-firebase/database';
+import Banner from '../src/ads/Banner';
 import {
   RewardedAd,
   RewardedAdEventType,
@@ -35,9 +36,10 @@ const MainScreen = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [autoCounter, setAutoCounter] = useState(0);
   const [totalTokens, setTotalTokens] = useState(0);
+  const rtdb = database();
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+    const unsubscribe = auth().onAuthStateChanged((currentUser) => {
       setUser(currentUser);
       if (currentUser) {
         const userRef = ref(rtdb, `mining_sessions/${currentUser.uid}`);
@@ -130,6 +132,7 @@ const MainScreen = () => {
         <Text style={styles.counterText}>
           Total Tokens: {totalTokens.toFixed(2)}
         </Text>
+        <Banner />
         <Modal transparent visible={showPopup} animationType="fade">
           <View style={styles.popupContainer}>
             <View style={styles.popup}>

@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, Platform } from 'react-native';
 import { useFonts } from 'expo-font';
 
 import AuthScreen from './screens/AuthScreen';
 import MainScreen from './screens/MainScreen';
 import { auth } from './firebaseConfig';
+import mobileAds, { MaxAdContentRating } from 'react-native-google-mobile-ads';
+import { requestTrackingPermission } from 'react-native-tracking-transparency';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,7 +22,24 @@ export default function App() {
   });
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    (async () => {
+      await mobileAds().setRequestConfiguration({
+        maxAdContentRating: MaxAdContentRating.G,
+        tagForChildDirectedTreatment: false,
+        tagForUnderAgeOfConsent: false,
+        testDeviceIdentifiers: ['EMULATOR'],
+      });
+
+      if (Platform.OS === 'ios') {
+        try { await requestTrackingPermission(); } catch {}
+      }
+
+      await mobileAds().initialize();
+    })();
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = auth().onAuthStateChanged((user) => {
       setUser(user);
       setLoading(false);
     });
