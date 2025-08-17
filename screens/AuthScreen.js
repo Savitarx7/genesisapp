@@ -18,14 +18,14 @@ export default function AuthScreen() {
   const [password, setPassword] = useState('');
 
   const handleSignup = () => {
-    auth
+    auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => Alert.alert('Signed up!'))
       .catch((error) => Alert.alert('Signup Error', error.message));
   };
 
   const handleLogin = () => {
-    auth
+    auth()
       .signInWithEmailAndPassword(email, password)
       .then(() => Alert.alert('Logged in!'))
       .catch((error) => Alert.alert('Login Error', error.message));

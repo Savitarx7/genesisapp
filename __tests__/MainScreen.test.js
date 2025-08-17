@@ -12,15 +12,27 @@ jest.mock('react-native-google-mobile-ads', () => {
     show: jest.fn(),
     addAdEventListener: jest.fn(() => jest.fn()),
   };
+  const BannerAd = () => null;
+  const BannerAdSize = { ADAPTIVE_BANNER: 'ADAPTIVE_BANNER' };
   return {
     RewardedAd: { createForAdRequest: jest.fn(() => reward) },
     RewardedAdEventType: { LOADED: 'loaded', EARNED_REWARD: 'earned', CLOSED: 'closed' },
-    TestIds: { REWARDED: 'test-id' },
+    TestIds: {
+      REWARDED: 'test-id',
+      BANNER: 'test-banner',
+      INTERSTITIAL: 'test-interstitial',
+      APP_OPEN: 'test-app-open',
+    },
+    BannerAd,
+    BannerAdSize,
     __reward: reward,
   };
 });
 
-jest.mock('../firebaseConfig', () => ({ auth: { onAuthStateChanged: jest.fn(() => jest.fn()) }, rtdb: {} }));
+jest.mock('../firebaseConfig', () => ({
+  auth: () => ({ onAuthStateChanged: jest.fn(() => jest.fn()) }),
+  database: () => ({}),
+}));
 
 jest.mock('@react-native-firebase/auth', () => () => ({ onAuthStateChanged: jest.fn(() => jest.fn()) }));
 jest.mock('@react-native-firebase/database', () => ({ ref: jest.fn(), get: jest.fn(), set: jest.fn(), onValue: jest.fn() }));

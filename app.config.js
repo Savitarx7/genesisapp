@@ -2,7 +2,7 @@ export default {
   expo: {
     name: 'GenesisApp',
     slug: 'GenesisApp',
-    version: '1.0.0',
+    version: '1.0.1',
     orientation: 'portrait',
     icon: './assets/icon.png',
     jsEngine: 'hermes',
