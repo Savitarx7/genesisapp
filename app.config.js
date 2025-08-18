@@ -16,8 +16,11 @@ export default {
       bundleIdentifier: 'com.adrianpavlick8.genesisapp',
       buildNumber: '1',
       supportsTablet: true,
+      googleServicesFile: './GoogleService-Info.plist',
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
+        // Test AdMob app ID for development; replace with production ID when ready.
+        GADApplicationIdentifier: 'ca-app-pub-3940256099942544~1458002511',
       },
     },
     android: {
