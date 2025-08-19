@@ -1,4 +1,4 @@
-// ✅ Updated MainScreen.js — using Web SDK-compatible Firebase
+// ✅ Updated MainScreen.js — using React Native Firebase database API
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -11,8 +11,8 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { auth, rtdb } from '../firebaseConfig';
-import { ref, get, set, onValue } from '@react-native-firebase/database';
+import { auth } from '../firebaseConfig';
+import database from '@react-native-firebase/database';
 import {
   RewardedAd,
   RewardedAdEventType,
@@ -21,6 +21,7 @@ import {
 
 // Use Google's test AdMob unit ID until the app is ready for production.
 const adUnitId = TestIds.REWARDED;
+const rtdb = database();
 
 const rewarded = RewardedAd.createForAdRequest(adUnitId, {
   requestNonPersonalizedAdsOnly: true,
@@ -37,11 +38,12 @@ const MainScreen = () => {
   const [totalTokens, setTotalTokens] = useState(0);
 
   useEffect(() => {
+    let userRef;
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
       setUser(currentUser);
       if (currentUser) {
-        const userRef = ref(rtdb, `mining_sessions/${currentUser.uid}`);
-        onValue(userRef, (snapshot) => {
+        userRef = rtdb.ref(`mining_sessions/${currentUser.uid}`);
+        userRef.on('value', (snapshot) => {
           const data = snapshot.val();
           if (data && data.totalTokens) {
             setTotalTokens(data.totalTokens);
@@ -49,7 +51,10 @@ const MainScreen = () => {
         });
       }
     });
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+      if (userRef) userRef.off();
+    };
   }, []);
 
   useEffect(() => {
@@ -85,12 +90,12 @@ const MainScreen = () => {
         setTimeout(() => setShowPopup(false), 3000);
 
         if (user) {
-          const userRef = ref(rtdb, `mining_sessions/${user.uid}`);
-          get(userRef).then((snapshot) => {
+          const userRef = rtdb.ref(`mining_sessions/${user.uid}`);
+          userRef.once('value').then((snapshot) => {
             const data = snapshot.val();
             const previous = data?.totalTokens || 0;
             const newTotal = previous + 0.01;
-            set(userRef, {
+            userRef.set({
               totalTokens: newTotal,
               lastStart: Date.now(),
             });
