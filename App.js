@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { View, ActivityIndicator } from 'react-native';
 import { useFonts } from 'expo-font';
+import mobileAds from 'react-native-google-mobile-ads';
 
 import AuthScreen from './screens/AuthScreen';
 import MainScreen from './screens/MainScreen';
@@ -18,6 +19,10 @@ export default function App() {
     'FiraCode-Regular': require('./assets/fonts/FiraCode-Regular.ttf'),
     'FiraCode-Bold': require('./assets/fonts/FiraCode-Bold.ttf'),
   });
+
+  useEffect(() => {
+    mobileAds().initialize();
+  }, []);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
