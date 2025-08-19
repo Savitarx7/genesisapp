@@ -20,10 +20,18 @@ jest.mock('react-native-google-mobile-ads', () => {
   };
 });
 
-jest.mock('../firebaseConfig', () => ({ auth: { onAuthStateChanged: jest.fn(() => jest.fn()) }, rtdb: {} }));
+jest.mock('../firebaseConfig', () => ({ auth: { onAuthStateChanged: jest.fn(() => jest.fn()) } }));
 
 jest.mock('@react-native-firebase/auth', () => () => ({ onAuthStateChanged: jest.fn(() => jest.fn()) }));
-jest.mock('@react-native-firebase/database', () => ({ ref: jest.fn(), get: jest.fn(), set: jest.fn(), onValue: jest.fn() }));
+jest.mock('@react-native-firebase/database', () => () => ({
+  ref: jest.fn(() => ({
+    once: jest.fn(),
+    on: jest.fn(),
+    off: jest.fn(),
+    set: jest.fn(),
+    update: jest.fn(),
+  })),
+}));
 
 describe('MainScreen', () => {
   let rewardMock;

@@ -1,5 +1,7 @@
-import { rtdb, auth } from "../firebaseConfig";
-import { ref, get, set, update } from "@react-native-firebase/database";
+import { auth } from "../firebaseConfig";
+import database from "@react-native-firebase/database";
+
+const rtdb = database();
 
 // Constants
 const BASE_RATE = 0.01; // Initial mining rate per hour
@@ -8,8 +10,8 @@ const MINING_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 // Get number of active miners
 export const getActiveUsers = async () => {
-    const usersRef = ref(rtdb, "active_users");
-    const snapshot = await get(usersRef);
+    const usersRef = rtdb.ref("active_users");
+    const snapshot = await usersRef.once('value');
     return snapshot.exists() ? snapshot.val() : 1; // Default to 1 if no data
 };
 
@@ -28,7 +30,8 @@ export const startMiningSession = async () => {
     const miningRate = calculateMiningRate(activeUsers);
     const startTime = Date.now();
 
-    await set(ref(rtdb, `mining_sessions/${userId}`), {
+    const sessionRef = rtdb.ref(`mining_sessions/${userId}`);
+    await sessionRef.set({
         startTime,
         miningRate,
         earnedTokens: 0,
@@ -42,8 +45,8 @@ export const getMiningSession = async () => {
     const user = auth.currentUser;
     if (!user) return null;
 
-    const sessionRef = ref(rtdb, `mining_sessions/${user.uid}`);
-    const snapshot = await get(sessionRef);
+    const sessionRef = rtdb.ref(`mining_sessions/${user.uid}`);
+    const snapshot = await sessionRef.once('value');
     return snapshot.exists() ? snapshot.val() : null;
 };
 
@@ -52,5 +55,6 @@ export const updateEarnedTokens = async (newTokens) => {
     const user = auth.currentUser;
     if (!user) return;
 
-    await update(ref(rtdb, `mining_sessions/${user.uid}`), { earnedTokens: newTokens });
+    const sessionRef = rtdb.ref(`mining_sessions/${user.uid}`);
+    await sessionRef.update({ earnedTokens: newTokens });
 };
