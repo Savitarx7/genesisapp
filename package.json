@@ -45,6 +45,9 @@
     "metro-resolver": "^0.82.0",
     "react-test-renderer": "19.0.0"
   },
+  "expo": {
+    "config": "app.config.js"
+  },
   "private": true,
   "engines": {
     "node": ">=18.18.0"
