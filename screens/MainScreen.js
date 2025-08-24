@@ -1,4 +1,4 @@
-// ✅ Updated MainScreen.js — using React Native Firebase database API
+// MainScreen.js — Firebase and AdMob removed for build testing
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -7,55 +7,19 @@ import {
   StyleSheet,
   ImageBackground,
   Modal,
-  Alert,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { auth } from '../firebaseConfig';
-import database from '@react-native-firebase/database';
-import {
-  RewardedAd,
-  RewardedAdEventType,
-  TestIds,
-} from 'react-native-google-mobile-ads';
-
-// Use Google's test AdMob unit ID until the app is ready for production.
-const adUnitId = TestIds.REWARDED;
-const rtdb = database();
-
-const rewarded = RewardedAd.createForAdRequest(adUnitId, {
-  requestNonPersonalizedAdsOnly: true,
-});
+// Firebase and AdMob disabled for build testing
 
 const backgroundImage = require('../assets/matrix-background.gif');
 const ACCENT = '#00ffff';
 
 const MainScreen = () => {
-  const [user, setUser] = useState(null);
   const [isMining, setIsMining] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [autoCounter, setAutoCounter] = useState(0);
   const [totalTokens, setTotalTokens] = useState(0);
-
-  useEffect(() => {
-    let userRef;
-    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
-      setUser(currentUser);
-      if (currentUser) {
-        userRef = rtdb.ref(`mining_sessions/${currentUser.uid}`);
-        userRef.on('value', (snapshot) => {
-          const data = snapshot.val();
-          if (data && data.totalTokens) {
-            setTotalTokens(data.totalTokens);
-          }
-        });
-      }
-    });
-    return () => {
-      unsubscribe();
-      if (userRef) userRef.off();
-    };
-  }, []);
 
   useEffect(() => {
     let interval;
@@ -68,56 +32,11 @@ const MainScreen = () => {
   }, [isMining]);
 
   const handleMinePress = () => {
-    if (!rewarded.loaded) {
-      rewarded.load();
-      Alert.alert('Ad not ready', 'Please try again in a few seconds.');
-      return;
-    }
-    rewarded.show();
+    setIsMining(true);
+    setShowPopup(true);
+    setTimeout(() => setShowPopup(false), 3000);
+    setTotalTokens((prev) => prev + 0.01);
   };
-
-  useEffect(() => {
-    const unsubscribeLoaded = rewarded.addAdEventListener(
-      RewardedAdEventType.LOADED,
-      () => console.log('Ad loaded')
-    );
-
-    const unsubscribeEarned = rewarded.addAdEventListener(
-      RewardedAdEventType.EARNED_REWARD,
-      () => {
-        setIsMining(true);
-        setShowPopup(true);
-        setTimeout(() => setShowPopup(false), 3000);
-
-        if (user) {
-          const userRef = rtdb.ref(`mining_sessions/${user.uid}`);
-          userRef.once('value').then((snapshot) => {
-            const data = snapshot.val();
-            const previous = data?.totalTokens || 0;
-            const newTotal = previous + 0.01;
-            userRef.set({
-              totalTokens: newTotal,
-              lastStart: Date.now(),
-            });
-            setTotalTokens(newTotal);
-          });
-        }
-      }
-    );
-
-    const unsubscribeClosed = rewarded.addAdEventListener(
-      RewardedAdEventType.CLOSED,
-      () => rewarded.load()
-    );
-
-    rewarded.load();
-
-    return () => {
-      unsubscribeLoaded();
-      unsubscribeEarned();
-      unsubscribeClosed();
-    };
-  }, [user]);
 
   return (
     <ImageBackground source={backgroundImage} style={styles.background}>
