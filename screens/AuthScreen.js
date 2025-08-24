@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { auth } from '../firebaseConfig';
+// import { auth } from '../firebaseConfig';
 
 
 export default function AuthScreen() {
@@ -18,17 +18,13 @@ export default function AuthScreen() {
   const [password, setPassword] = useState('');
 
   const handleSignup = () => {
-    auth
-      .createUserWithEmailAndPassword(email, password)
-      .then(() => Alert.alert('Signed up!'))
-      .catch((error) => Alert.alert('Signup Error', error.message));
+    // Firebase signup disabled for build testing
+    Alert.alert('Signup disabled for testing');
   };
 
   const handleLogin = () => {
-    auth
-      .signInWithEmailAndPassword(email, password)
-      .then(() => Alert.alert('Logged in!'))
-      .catch((error) => Alert.alert('Login Error', error.message));
+    // Firebase login disabled for build testing
+    Alert.alert('Login disabled for testing');
   };
 
   return (

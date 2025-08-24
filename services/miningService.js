@@ -1,60 +1,64 @@
-import { auth } from "../firebaseConfig";
-import database from "@react-native-firebase/database";
+/**
+ * Mining service disabled while Firebase is removed for build testing.
+ */
 
-const rtdb = database();
+// import { auth } from "../firebaseConfig";
+// import database from "@react-native-firebase/database";
 
-// Constants
-const BASE_RATE = 0.01; // Initial mining rate per hour
-const DECAY_CONSTANT = 5.82e-8; // Controls the rate decrease
-const MINING_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+// const rtdb = database();
 
-// Get number of active miners
-export const getActiveUsers = async () => {
-    const usersRef = rtdb.ref("active_users");
-    const snapshot = await usersRef.once('value');
-    return snapshot.exists() ? snapshot.val() : 1; // Default to 1 if no data
-};
+// // Constants
+// const BASE_RATE = 0.01; // Initial mining rate per hour
+// const DECAY_CONSTANT = 5.82e-8; // Controls the rate decrease
+// const MINING_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
-// Calculate dynamic mining rate
-export const calculateMiningRate = (activeUsers) => {
-    return BASE_RATE * Math.exp(-DECAY_CONSTANT * activeUsers);
-};
+// // Get number of active miners
+// export const getActiveUsers = async () => {
+//     const usersRef = rtdb.ref("active_users");
+//     const snapshot = await usersRef.once('value');
+//     return snapshot.exists() ? snapshot.val() : 1; // Default to 1 if no data
+// };
 
-// Start a mining session
-export const startMiningSession = async () => {
-    const user = auth.currentUser;
-    if (!user) throw new Error("User not authenticated");
+// // Calculate dynamic mining rate
+// export const calculateMiningRate = (activeUsers) => {
+//     return BASE_RATE * Math.exp(-DECAY_CONSTANT * activeUsers);
+// };
 
-    const userId = user.uid;
-    const activeUsers = await getActiveUsers();
-    const miningRate = calculateMiningRate(activeUsers);
-    const startTime = Date.now();
+// // Start a mining session
+// export const startMiningSession = async () => {
+//     const user = auth.currentUser;
+//     if (!user) throw new Error("User not authenticated");
 
-    const sessionRef = rtdb.ref(`mining_sessions/${userId}`);
-    await sessionRef.set({
-        startTime,
-        miningRate,
-        earnedTokens: 0,
-    });
+//     const userId = user.uid;
+//     const activeUsers = await getActiveUsers();
+//     const miningRate = calculateMiningRate(activeUsers);
+//     const startTime = Date.now();
 
-    return { miningRate, startTime };
-};
+//     const sessionRef = rtdb.ref(`mining_sessions/${userId}`);
+//     await sessionRef.set({
+//         startTime,
+//         miningRate,
+//         earnedTokens: 0,
+//     });
 
-// Get existing mining session
-export const getMiningSession = async () => {
-    const user = auth.currentUser;
-    if (!user) return null;
+//     return { miningRate, startTime };
+// };
 
-    const sessionRef = rtdb.ref(`mining_sessions/${user.uid}`);
-    const snapshot = await sessionRef.once('value');
-    return snapshot.exists() ? snapshot.val() : null;
-};
+// // Get existing mining session
+// export const getMiningSession = async () => {
+//     const user = auth.currentUser;
+//     if (!user) return null;
 
-// Update earned tokens
-export const updateEarnedTokens = async (newTokens) => {
-    const user = auth.currentUser;
-    if (!user) return;
+//     const sessionRef = rtdb.ref(`mining_sessions/${user.uid}`);
+//     const snapshot = await sessionRef.once('value');
+//     return snapshot.exists() ? snapshot.val() : null;
+// };
 
-    const sessionRef = rtdb.ref(`mining_sessions/${user.uid}`);
-    await sessionRef.update({ earnedTokens: newTokens });
-};
+// // Update earned tokens
+// export const updateEarnedTokens = async (newTokens) => {
+//     const user = auth.currentUser;
+//     if (!user) return;
+
+//     const sessionRef = rtdb.ref(`mining_sessions/${user.uid}`);
+//     await sessionRef.update({ earnedTokens: newTokens });
+// };
