@@ -1,0 +1,49 @@
+{
+  "expo": {
+    "name": "GenesisApp",
+    "slug": "GenesisApp",
+    "version": "1.0.1",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "jsEngine": "hermes",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "bundleIdentifier": "com.adrianpavlick8.genesisapp",
+      "buildNumber": "1",
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Used for in-app features that need the camera.",
+        "NSMicrophoneUsageDescription": "Used for audio features and voice input.",
+        "NSPhotoLibraryUsageDescription": "Used to select and save images.",
+        "NSPhotoLibraryAddUsageDescription": "Used to save images to your library.",
+        "NSBluetoothAlwaysUsageDescription": "Used to connect to nearby devices.",
+        "NSBluetoothPeripheralUsageDescription": "Used to communicate with Bluetooth devices.",
+        "NSLocalNetworkUsageDescription": "Local network is used to discover and communicate with devices on your network.",
+        "NSBonjourServices": ["_http._tcp", "_tcp"],
+        "NSMotionUsageDescription": "Used for motion-based effects.",
+        "NSFaceIDUsageDescription": "Used for secure authentication.",
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "com.adrianpavlick8.genesisapp",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#000000"
+      }
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f0fad71c-a7c9-4c22-9356-33a6ca1b0c32"
+      }
+    }
+  }
+}
