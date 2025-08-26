@@ -77,4 +77,4 @@ yarn-error.log
 # Expo development directory
 .expo/
 android/
-/ios
+ios/
