@@ -18,6 +18,16 @@ export default {
       supportsTablet: true,
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
+        NSCameraUsageDescription: 'Allow camera access for capturing photos and videos.',
+        NSMicrophoneUsageDescription: 'Allow microphone access for recording audio.',
+        NSPhotoLibraryUsageDescription: 'Allow access to your photo library.',
+        NSPhotoLibraryAddUsageDescription: 'Allow saving images to your photo library.',
+        NSBluetoothAlwaysUsageDescription: 'Allow Bluetooth to connect to nearby devices.',
+        NSBluetoothPeripheralUsageDescription: 'Allow communication with Bluetooth peripherals.',
+        NSLocalNetworkUsageDescription: 'Allow discovery of devices on your local network.',
+        NSBonjourServices: ['_http._tcp', '_tcp'],
+        NSMotionUsageDescription: 'Allow access to motion sensors.',
+        NSFaceIDUsageDescription: 'Allow Face ID for authentication.',
         // GADApplicationIdentifier:
         //   process.env.EXPO_PUBLIC_IOS_ADMOB_APP_ID ||
         //   'ca-app-pub-3940256099942544~1458002511',

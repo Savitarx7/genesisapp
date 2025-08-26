@@ -1,5 +1,5 @@
 // screens/AuthScreen.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -16,6 +16,10 @@ import { Ionicons } from '@expo/vector-icons';
 export default function AuthScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    // defer startup initializers such as audio, sensors, or network requests here
+  }, []);
 
   const handleSignup = () => {
     // Firebase signup disabled for build testing
