@@ -1,4 +1,4 @@
-// MainScreen.js — Firebase and AdMob removed for build testing
+// MainScreen.js
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-// Firebase and AdMob disabled for build testing
 
 const backgroundImage = require('../assets/matrix-background.gif');
 const ACCENT = '#00ffff';

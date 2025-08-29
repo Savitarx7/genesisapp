@@ -6,7 +6,7 @@ jest.mock('@expo/vector-icons');
 
 import MainScreen from '../screens/MainScreen';
 
-describe('MainScreen without ads or firebase', () => {
+describe('MainScreen', () => {
   it('increments tokens and shows popup when Mine button pressed', () => {
     const { getByText, queryByText } = render(<MainScreen />);
     fireEvent.press(getByText('Mine'));
