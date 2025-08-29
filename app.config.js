@@ -28,11 +28,6 @@ export default {
         NSBonjourServices: ['_http._tcp', '_tcp'],
         NSMotionUsageDescription: 'Allow access to motion sensors.',
         NSFaceIDUsageDescription: 'Allow Face ID for authentication.',
-        // GADApplicationIdentifier:
-        //   process.env.EXPO_PUBLIC_IOS_ADMOB_APP_ID ||
-        //   'ca-app-pub-3940256099942544~1458002511',
-        // NSUserTrackingUsageDescription:
-        //   'This identifier will be used to deliver personalized ads to you.',
       },
     },
     android: {
@@ -60,17 +55,6 @@ export default {
           },
         },
       ],
-      // [
-      //   'react-native-google-mobile-ads',
-      //   {
-      //     iosAppId:
-      //       process.env.EXPO_PUBLIC_IOS_ADMOB_APP_ID ||
-      //       'ca-app-pub-3940256099942544~1458002511',
-      //     androidAppId:
-      //       process.env.EXPO_PUBLIC_ANDROID_ADMOB_APP_ID ||
-      //       'ca-app-pub-3940256099942544~3347511713',
-      //   },
-      // ],
     ],
   },
 };

@@ -6,12 +6,6 @@ By using this application you agree to the following terms. If you do not agree,
 
 - The app includes a simulated mining feature that awards virtual tokens. These tokens do not represent real currency or assets and may be reset at any time.
 - You must not attempt to reverse engineer or misuse the app or its services.
-- Ads may be displayed within the app. Some features may be supported by advertising revenue.
-
-## Accounts and Security
-
-- You are responsible for maintaining the confidentiality of your login credentials and for all activities that occur under your account.
-- We reserve the right to suspend or terminate accounts that violate these terms or misuse the services.
 
 ## Disclaimer
 
